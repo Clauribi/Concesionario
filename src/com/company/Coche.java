@@ -1,5 +1,8 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Coche {
     private String marca;
     private String modelo;
@@ -10,9 +13,37 @@ public class Coche {
 
     private Exposicion exposicion;
 
+    public boolean isReparando() {
+        return reparando;
+    }
+
+    public boolean isReservado() {
+        return reservado;
+    }
+
+    public boolean isEnVenta() {
+        return enVenta;
+    }
+
+    public boolean isVendido() {
+        return vendido;
+    }
+
+    private boolean reparando;
     private boolean reservado;
-    private boolean comprado;
+    private boolean enVenta;
     private boolean vendido;
+    private ArrayList<Reparacion> reparaciones;
+
+    public ArrayList<Reparacion> getReparaciones() {
+        return reparaciones;
+    }
+
+    private ArrayList<Coche> cochesReparacion;
+    private ArrayList<Coche> cochesVenta;
+    private ArrayList<Coche> cochesReservados;
+    private ArrayList<Coche> cochesVendidos;
+
 
     public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, String tipo, Exposicion exposicion) throws ExceptionParametrosInvalidos {
         if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
@@ -30,5 +61,29 @@ public class Coche {
         this.tipo = tipo;
         if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
         this.exposicion = exposicion;
+        this.enVenta =true;
+    }
+    public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {
+        if (expo==null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
+        this.exposicion= expo;
+    }
+    public void estado (Boolean estado) {
+        if (estado = reparando) {
+            reservado = false;
+            enVenta = false;
+            vendido = false;
+        } else if (estado = reservado) {
+            reparando = false;
+            enVenta = false;
+            vendido = false;
+        } else if (estado = enVenta) {
+            reparando = false;
+            reservado = false;
+            vendido = false;
+        } else if (estado = vendido) {
+            reservado = false;
+            reparando = false;
+            enVenta = false;
+        }
     }
 }
