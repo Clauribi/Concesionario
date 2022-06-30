@@ -13,15 +13,19 @@ public class Exposicion {
         this.numExposicion = numExposicion;
         if (direccion == null) throw new ExceptionParametrosInvalidos("La dirección no puede ser null.");
         this.direccion = direccion;
-        if (Integer.toString(telefono).length() != 9) throw new ExceptionParametrosInvalidos("El teléfono tiene que tener 9 dígitos.");
+        if (Integer.toString(telefono).length() != 9)
+            throw new ExceptionParametrosInvalidos("El teléfono tiene que tener 9 dígitos.");
         this.telefono = telefono;
     }
+
     public void addCoche(Coche coche) throws ExceptionParametrosInvalidos {
-        if(coche ==  null) throw new ExceptionParametrosInvalidos("El coche no existe.");
+        if (coche == null) throw new ExceptionParametrosInvalidos("El coche no existe.");
         this.listadoCoches.add(coche);
     }
+
     public void borrarCoche(Coche coche) throws ExceptionParametrosInvalidos {
-        if(! this.listadoCoches.contains(coche))throw new ExceptionParametrosInvalidos("El coche no esta en la posicion indicada.");
+        if (!this.listadoCoches.contains(coche))
+            throw new ExceptionParametrosInvalidos("El coche no esta en la posicion indicada.");
         this.listadoCoches.remove(coche);
     }
 }
