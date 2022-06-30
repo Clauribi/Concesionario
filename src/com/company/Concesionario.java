@@ -7,7 +7,7 @@ public class Concesionario {
     public Concesionario() {
     }
 
-    public void menu() {
+    public void menu() throws ExceptionParametrosInvalidos {
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
@@ -59,7 +59,7 @@ public class Concesionario {
                     System.out.println("Indica la matricula del coche que quieres vender.");
                     String matricula = sc.next();
                     VendedorComision vendedor1 = new VendedorComision("Luis", "calle", "12345678a", 123456789);
-                    vendedor1.venderCoche();
+                    vendedor1.venderCoche(matricula);
 
             }
         }
