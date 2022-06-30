@@ -1,12 +1,17 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Exposicion {
     private int numExposicion;
     private String direccion;
     private int telefono;
-    private ArrayList<Coche> listadoCoches = new ArrayList<>();
+    private HashMap<String, Coche> listadoCoches = new HashMap<>();
+
+    public HashMap<String, Coche> getListadoCoches() {
+        return listadoCoches;
+    }
 
     public Exposicion(int numExposicion, String direccion, int telefono) throws ExceptionParametrosInvalidos {
         if (numExposicion == 0) throw new ExceptionParametrosInvalidos("El número de la exposición no puede ser 0.");
