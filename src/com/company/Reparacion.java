@@ -1,22 +1,24 @@
 package com.company;
 
 public class Reparacion {
-    private String tipo;
+    private TipoReparacion tipo;
     private Coche coche;
     private boolean resuelta;
 
-    public Reparacion(String tipo, Coche coche) throws ExceptionParametrosInvalidos {
-        if (tipo != "mecanica" || tipo != "electrica" || tipo != "chapa" || tipo != "revision")
+    public Reparacion(TipoReparacion tipo, Coche coche) throws ExceptionParametrosInvalidos {
+        if (tipo == null)
             throw new ExceptionParametrosInvalidos("Los tipos de reparación tienen que ser: 'mecanica', 'electrica', 'chapa' o 'revision'");
         this.tipo = tipo;
-        if (coche ==null) throw new ExceptionParametrosInvalidos("El coche no existe.");
+        if (coche == null) throw new ExceptionParametrosInvalidos("El coche no existe.");
         this.coche = coche;
-        this.coche.estado(coche.isReparando());
+        this.coche.setEstado(EstadoCoche.reparando);
+        this.coche.getCochesReparacion().put(this.coche.getMatricula(), coche);
     }
-    public void resolver() throws ExceptionParametrosInvalidos {
-        this.coche.estado(coche.isEnVenta());
-        coche.getReparaciones().add(new Reparacion(this.tipo,this.coche));
 
+    public void resolver() throws ExceptionParametrosInvalidos {
+        this.coche.setEstado(EstadoCoche.enVenta);
+        coche.getReparaciones().put(this.coche.getMatricula(), new Reparacion(this.tipo, this.coche));
+        this.coche.getCochesReparacion().remove(this.coche.getMatricula());
     }
 
 }

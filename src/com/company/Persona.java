@@ -13,7 +13,8 @@ public class Persona {
         this.direccion = direccion;
         if(dni==null) throw new ExceptionParametrosInvalidos("El dni no puede ser null.");
         this.dni = dni;
-        if(telefono<=0) throw new ExceptionParametrosInvalidos("El telefono no puede ser 0 o menor de 0");
+        if (Integer.toString(telefono).length() != 9)
+            throw new ExceptionParametrosInvalidos("El teléfono tiene que tener 9 dígitos.");
         this.telefono = telefono;
     }
 }

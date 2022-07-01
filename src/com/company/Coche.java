@@ -1,7 +1,6 @@
 package com.company;
 
-import java.util.ArrayList;
-
+import java.util.HashMap;
 
 public class Coche {
     private String marca;
@@ -9,43 +8,61 @@ public class Coche {
     private String matricula;
     private double precioCompra;
     private double precioVenta;
-    private String tipo;
-
+    private TipoCoche tipo;
+    private EstadoCoche estado;
     private Exposicion exposicion;
+    private HashMap<String, Coche> listadoCoches;
+    private HashMap<String, Coche> cochesReparacion;
+    private HashMap<String, Coche> cochesVenta;
+    private HashMap<String, Coche> cochesReservados;
+    private HashMap<String, Coche> cochesVendidos;
 
-    public boolean isReparando() {
-        return reparando;
+    private HashMap<String, Reparacion> reparaciones;
+
+    public void setExposicion(Integer numExpo) {
+        if(exposicion.getListasExpos().containsKey(numExpo)){
+         this.exposicion= exposicion.getListasExpos().get(numExpo);
+        }
+
+    }
+    public EstadoCoche getEstado() {
+        return estado;
     }
 
-    public boolean isReservado() {
-        return reservado;
+    public void setEstado(EstadoCoche estado) throws ExceptionParametrosInvalidos {
+        cambiarCocheLista(this.matricula);
+        this.estado = estado;
     }
 
-    public boolean isEnVenta() {
-        return enVenta;
+    public String getMatricula() {
+        return matricula;
     }
 
-    public boolean isVendido() {
-        return vendido;
+    public HashMap<String, Coche> getListadoCoches() {
+        return listadoCoches;
     }
 
-    private boolean reparando;
-    private boolean reservado;
-    private boolean enVenta;
-    private boolean vendido;
-    private ArrayList<Reparacion> reparaciones;
-
-    public ArrayList<Reparacion> getReparaciones() {
+    public HashMap<String, Reparacion> getReparaciones() {
         return reparaciones;
     }
 
-    private ArrayList<Coche> cochesReparacion;
-    private ArrayList<Coche> cochesVenta;
-    private ArrayList<Coche> cochesReservados;
-    private ArrayList<Coche> cochesVendidos;
+    public HashMap<String, Coche> getCochesReparacion() {
+        return cochesReparacion;
+    }
 
+    public HashMap<String, Coche> getCochesVenta() {
+        return cochesVenta;
+    }
 
-    public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, String tipo, Exposicion exposicion) throws ExceptionParametrosInvalidos {
+    public HashMap<String, Coche> getCochesReservados() {
+        return cochesReservados;
+    }
+
+    public HashMap<String, Coche> getCochesVendidos() {
+        return cochesVendidos;
+    }
+
+    public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, TipoCoche tipo, Exposicion exposicion) throws ExceptionParametrosInvalidos {
         if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
         this.marca = marca;
         if (modelo == null) throw new ExceptionParametrosInvalidos("El modelo no puede ser null.");
@@ -56,34 +73,58 @@ public class Coche {
         if (precioVenta <= precioCompra)
             throw new ExceptionParametrosInvalidos("El precio de venta no puede ser inferior o igual al precio de compra.");
         this.precioVenta = precioVenta;
-        if (tipo != "turismo" || tipo != "industrial" || tipo != "todoterreno")
+        if (tipo == null)
             throw new ExceptionParametrosInvalidos("Los tipos de vehículos permitidos son: 'turismo', 'industrial' o 'todoterreno'");
         this.tipo = tipo;
-        if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
+        if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposición no existe.");
         this.exposicion = exposicion;
-        this.enVenta =true;
+        this.estado = EstadoCoche.enVenta;
+        listadoCoches.put(matricula,new Coche(marca, modelo, matricula, precioCompra, precioVenta, tipo, exposicion));
     }
+
     public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {
-        if (expo==null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
-        this.exposicion= expo;
+        if (expo == null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
+        this.exposicion = expo;
     }
-    public void estado (Boolean estado) {
-        if (estado = reparando) {
-            reservado = false;
-            enVenta = false;
-            vendido = false;
-        } else if (estado = reservado) {
-            reparando = false;
-            enVenta = false;
-            vendido = false;
-        } else if (estado = enVenta) {
-            reparando = false;
-            reservado = false;
-            vendido = false;
-        } else if (estado = vendido) {
-            reservado = false;
-            reparando = false;
-            enVenta = false;
+
+    public void consultaReparaciones(String matricula) throws ExceptionParametrosInvalidos {
+        if (this.reparaciones.containsKey(matricula)) {
+            this.reparaciones.get(matricula);
+        } else {
+            throw new ExceptionParametrosInvalidos("La matricula no existe o no tiene reparaciones.");
         }
     }
+
+    public void cambiarCocheLista(String matricula) throws ExceptionParametrosInvalidos {
+        if (!listadoCoches.containsKey(matricula))
+            throw new ExceptionParametrosInvalidos("El coche no está en ningún listado.");
+        if (cochesVendidos.containsKey(matricula))
+            throw new ExceptionParametrosInvalidos("El coche que deseas cambiar está vendido.");
+        if (estado == EstadoCoche.enVenta) {
+            Coche c = listadoCoches.get(matricula);
+            cochesVenta.put(matricula, c);
+            if (cochesReparacion.containsKey(matricula)) cochesReparacion.remove(matricula);
+            if (cochesReservados.containsKey(matricula)) cochesReservados.remove(matricula);
+        }
+        if (estado == EstadoCoche.reservado) {
+            Coche c = listadoCoches.get(matricula);
+            cochesReservados.put(matricula, c);
+            if (cochesReparacion.containsKey(matricula)) cochesReparacion.remove(matricula);
+            if (cochesVenta.containsKey(matricula)) cochesVenta.remove(matricula);
+        }
+        if (estado == EstadoCoche.reparando) {
+            Coche c = listadoCoches.get(matricula);
+            cochesReparacion.put(matricula, c);
+            if (cochesVenta.containsKey(matricula)) cochesVenta.remove(matricula);
+            if (cochesReservados.containsKey(matricula)) cochesReservados.remove(matricula);
+        }
+        if (estado == EstadoCoche.vendido) {
+            Coche c = listadoCoches.get(matricula);
+            cochesVendidos.put(matricula, c);
+            if (cochesVenta.containsKey(matricula)) cochesVenta.remove(matricula);
+            if (cochesReservados.containsKey(matricula)) cochesReservados.remove(matricula);
+            if (cochesReparacion.containsKey(matricula)) cochesReparacion.remove(matricula);
+        }
+    }
+
 }
