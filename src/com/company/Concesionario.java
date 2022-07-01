@@ -72,7 +72,7 @@ public class Concesionario {
                     v1.reservarCoche(matricula);
                     break;
                 case 6:
-                    salir=true;
+                    salir = true;
                     break;
                 default:
                     System.out.println("opcion incorrecta");
@@ -81,8 +81,87 @@ public class Concesionario {
         }
     }
 
-    public void gestionDirectorComercial() {
+    public void gestionDirectorComercial() throws ExceptionParametrosInvalidos {
+        Scanner sc = new Scanner(System.in);
+        boolean salir = false;
+        int opcion;
+        String matricula;
+        String nombre = sc.next();
+        String direccion = sc.next();
+        String dni = sc.next();
+        int telefono = sc.nextInt();
+        DirectorComercial d1 = new DirectorComercial(nombre, direccion, dni, telefono);
+        while (!salir) {
+            System.out.println("Elige que deseas hacer.");
+            System.out.println("1.-Añadir un coche.");
+            System.out.println("2.-Reparar coche.");
+            System.out.println("3.-Salir.");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    System.out.printf("Matricula:");
+                    matricula = sc.next();
+                    System.out.printf("Modelo:");
+                    String modelo = sc.next();
+                    System.out.printf("Marca:");
+                    String marca = sc.next();
+                    System.out.printf("Compra:");
+                    double compra = sc.nextDouble();
+                    System.out.printf("Venta:");
+                    double venta = sc.nextDouble();
+                    System.out.printf("Tipo:");
+                    System.out.println("1.-Industrial.");
+                    System.out.println("2.-Todoterreno.");
+                    System.out.println("3.-Turismo.");
+                    TipoCoche t = null;
+                    int tipo;
+                    tipo = sc.nextInt();
+                    switch (tipo) {
+                        case 1:
+                            t = TipoCoche.industrial;
+                            break;
+                        case 2:
+                            t = TipoCoche.todoterreno;
+                            break;
+                        case 3:
+                            t = TipoCoche.turismo;
+                            break;
+                        default:
+                            System.out.println("Tipo erroneo");
+                            break;
+                    }
+//                    EstadoCoche e;
+//                    int estado;
+//                    estado = sc.nextInt();
+//                    System.out.println("1.-Venta.");
+//                    System.out.println("2.-Vendido.");
+//                    System.out.println("3.-Reservado.");
+//                    System.out.println("4.-Reparando.");
+//                    switch (estado){
+//                        case 1:
+//                            e = EstadoCoche.enVenta;
+//                            break;
+//                        case 2:
+//                            e = EstadoCoche.vendido;
+//                            break;
+//                        case 3:
+//                            e = EstadoCoche.reservado;
+//                            break;
+//                        case 4:
+//                            e = EstadoCoche.reparando;
+//                            break;
+//                        default:
+//                            System.out.println("Estado erroneo.");
+//                    }
+                    Coche c = new Coche(marca, modelo, matricula, compra, venta, t);
+                case 3:
+                    salir = true;
+                    break;
+                default:
+                    System.out.println("opcion incorrecta");
+            }
 
+        }
     }
 
     public void gestionMecanico() throws ExceptionParametrosInvalidos {

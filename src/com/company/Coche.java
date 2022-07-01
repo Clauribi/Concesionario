@@ -11,7 +11,7 @@ public class Coche {
     private TipoCoche tipo;
     private EstadoCoche estado;
     private Exposicion exposicion;
-    private HashMap<String, Coche> listadoCoches;
+    private HashMap<String, Coche> listadoCoches = new HashMap<>();
     private HashMap<String, Coche> cochesReparacion;
     private HashMap<String, Coche> cochesVenta;
     private HashMap<String, Coche> cochesReservados;
@@ -62,7 +62,7 @@ public class Coche {
         return cochesVendidos;
     }
 
-    public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, TipoCoche tipo, Exposicion exposicion) throws ExceptionParametrosInvalidos {
+    public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, TipoCoche tipo) throws ExceptionParametrosInvalidos {
         if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
         this.marca = marca;
         if (modelo == null) throw new ExceptionParametrosInvalidos("El modelo no puede ser null.");
@@ -76,10 +76,10 @@ public class Coche {
         if (tipo == null)
             throw new ExceptionParametrosInvalidos("Los tipos de vehículos permitidos son: 'turismo', 'industrial' o 'todoterreno'");
         this.tipo = tipo;
-        if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposición no existe.");
-        this.exposicion = exposicion;
+//        if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposición no existe.");
+//        this.exposicion = exposicion;
         this.estado = EstadoCoche.enVenta;
-        listadoCoches.put(matricula,new Coche(marca, modelo, matricula, precioCompra, precioVenta, tipo, exposicion));
+        this.listadoCoches.put(matricula,new Coche(marca, modelo, matricula, precioCompra, precioVenta, tipo));
     }
 
     public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {

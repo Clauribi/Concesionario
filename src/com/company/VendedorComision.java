@@ -13,8 +13,8 @@ public class VendedorComision extends Persona {
 
     public void venderCoche(String matricula) throws ExceptionParametrosInvalidos {
         if (coche.getCochesReservados().containsKey(matricula)) {
-            coche = coche.getCochesReservados().get(matricula);
-            coche.setEstado(EstadoCoche.vendido);
+            this.coche = coche.getCochesReservados().get(matricula);
+            this.coche.setEstado(EstadoCoche.vendido);
             this.cochesVendidos.put(matricula, coche);
         } else if (coche.getCochesVenta().containsKey(matricula)) {
             coche = coche.getCochesVenta().get(matricula);
