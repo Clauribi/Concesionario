@@ -12,13 +12,11 @@ public class Reparacion {
         if (coche == null) throw new ExceptionParametrosInvalidos("El coche no existe.");
         this.coche = coche;
         this.coche.setEstado(EstadoCoche.reparando);
-        this.coche.getCochesReparacion().put(this.coche.getMatricula(), coche);
     }
 
     public void resolver() throws ExceptionParametrosInvalidos {
         this.coche.setEstado(EstadoCoche.enVenta);
         coche.getReparaciones().put(this.coche.getMatricula(), new Reparacion(this.tipo, this.coche));
-        this.coche.getCochesReparacion().remove(this.coche.getMatricula());
     }
 
 }

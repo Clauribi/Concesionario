@@ -1,10 +1,80 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Concesionario {
+    private HashMap<Integer, Exposicion> listadoExposiciones;
+    private HashMap<String, Coche> listadoCochesTotalesDefinitivo;
+    private HashMap<String, VendedorComision> listadoVendedores;
+    private HashMap<String, Cliente> listadoClientes;
+    private Scanner sc = new Scanner(System.in);
 
-    public Concesionario() {
+    public Concesionario() throws ExceptionParametrosInvalidos {
+        Exposicion expo = new Exposicion(1, "direccion", 123456789);
+        this.listadoExposiciones = new HashMap<>();
+        this.listadoCochesTotalesDefinitivo = new HashMap<>();
+        this.listadoClientes = new HashMap<>();
+        this.listadoVendedores = new HashMap<>();
+        this.listadoExposiciones.put(expo.getNumExposicion(), expo);
+    }
+
+    public void addCoche() throws ExceptionParametrosInvalidos {
+        System.out.printf("Matricula:");
+        String matricula = sc.next();
+        System.out.printf("Modelo:");
+        String modelo = sc.next();
+        System.out.printf("Marca:");
+        String marca = sc.next();
+        System.out.printf("Compra:");
+        double compra = sc.nextDouble();
+        System.out.printf("Venta:");
+        double venta = sc.nextDouble();
+        System.out.printf("Tipo:");
+        System.out.println("1.-Industrial.");
+        System.out.println("2.-Todoterreno.");
+        System.out.println("3.-Turismo.");
+        TipoCoche t = null;
+        int tipo;
+        tipo = sc.nextInt();
+        switch (tipo) {
+            case 1:
+                t = TipoCoche.industrial;
+                break;
+            case 2:
+                t = TipoCoche.todoterreno;
+                break;
+            case 3:
+                t = TipoCoche.turismo;
+                break;
+            default:
+                System.out.println("Tipo erroneo");
+                break;
+        }
+        System.out.println("Nº exposición: ");
+        int expo = sc.nextInt();
+        if (!listadoExposiciones.containsKey(expo)) throw new ExceptionParametrosInvalidos("No existe la exposición");
+        Exposicion exposicion = listadoExposiciones.get(expo);
+        Coche cocheNew = new Coche(marca, modelo, matricula, compra, venta, t, exposicion);
+        this.listadoCochesTotalesDefinitivo.put(cocheNew.getMatricula(), cocheNew);
+    }
+
+    public ArrayList getCochesPorExposicion(int expo){
+        Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
+        ArrayList<Coche> listaCoches = new ArrayList<>(valores);
+        ArrayList<Coche> listaCochesEnExposicion = new ArrayList<>();
+        for (Coche c : listaCoches){
+            if (c.getExposicion().getNumExposicion() == expo){
+                listaCochesEnExposicion.add(c);
+            }
+        }
+        return listaCochesEnExposicion;
+    }
+
+    public HashMap<Integer, Exposicion> getListadoExposiciones() {
+        return listadoExposiciones;
     }
 
     public void menu() throws ExceptionParametrosInvalidos {
@@ -64,12 +134,12 @@ public class Concesionario {
                 case 1:
                     System.out.println("Indica la matricula del coche que quieres vender.");
                     matricula = sc.next();
-                    v1.venderCoche(matricula);
+//                    v1.venderCoche(matricula);
                     break;
                 case 2:
                     System.out.println("Indica la matricula del coche que quieres reservar.");
                     matricula = sc.next();
-                    v1.reservarCoche(matricula);
+//                    v1.reservarCoche(matricula);
                     break;
                 case 6:
                     salir = true;
@@ -85,7 +155,6 @@ public class Concesionario {
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
-        String matricula;
         String nombre = sc.next();
         String direccion = sc.next();
         String dni = sc.next();
@@ -94,73 +163,22 @@ public class Concesionario {
         while (!salir) {
             System.out.println("Elige que deseas hacer.");
             System.out.println("1.-Añadir un coche.");
-            System.out.println("2.-Reparar coche.");
+            System.out.println("2.-Consultar coches en una exposición.");
             System.out.println("3.-Salir.");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
-                    System.out.printf("Matricula:");
-                    matricula = sc.next();
-                    System.out.printf("Modelo:");
-                    String modelo = sc.next();
-                    System.out.printf("Marca:");
-                    String marca = sc.next();
-                    System.out.printf("Compra:");
-                    double compra = sc.nextDouble();
-                    System.out.printf("Venta:");
-                    double venta = sc.nextDouble();
-                    System.out.printf("Tipo:");
-                    System.out.println("1.-Industrial.");
-                    System.out.println("2.-Todoterreno.");
-                    System.out.println("3.-Turismo.");
-                    TipoCoche t = null;
-                    int tipo;
-                    tipo = sc.nextInt();
-                    switch (tipo) {
-                        case 1:
-                            t = TipoCoche.industrial;
-                            break;
-                        case 2:
-                            t = TipoCoche.todoterreno;
-                            break;
-                        case 3:
-                            t = TipoCoche.turismo;
-                            break;
-                        default:
-                            System.out.println("Tipo erroneo");
-                            break;
-                    }
-//                    EstadoCoche e;
-//                    int estado;
-//                    estado = sc.nextInt();
-//                    System.out.println("1.-Venta.");
-//                    System.out.println("2.-Vendido.");
-//                    System.out.println("3.-Reservado.");
-//                    System.out.println("4.-Reparando.");
-//                    switch (estado){
-//                        case 1:
-//                            e = EstadoCoche.enVenta;
-//                            break;
-//                        case 2:
-//                            e = EstadoCoche.vendido;
-//                            break;
-//                        case 3:
-//                            e = EstadoCoche.reservado;
-//                            break;
-//                        case 4:
-//                            e = EstadoCoche.reparando;
-//                            break;
-//                        default:
-//                            System.out.println("Estado erroneo.");
-//                    }
-                    Coche c = new Coche(marca, modelo, matricula, compra, venta, t);
+                    addCoche();
+                    break;
+                case 2:
+                    System.out.println(getCochesPorExposicion(1).size());
+                    break;
                 case 3:
                     salir = true;
                     break;
                 default:
                     System.out.println("opcion incorrecta");
             }
-
         }
     }
 
