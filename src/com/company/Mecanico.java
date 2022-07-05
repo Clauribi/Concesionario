@@ -23,7 +23,7 @@ public class Mecanico extends Persona{
     }
 
     public void repararCoche(TipoReparacion tipo, String matricula) throws ExceptionParametrosInvalidos {
-        coche = coche.getListadoCoches().get(matricula);
+//        coche = coche.getListadoCoches().get(matricula);
         Reparacion r = new Reparacion(tipo, coche);
     }
 }

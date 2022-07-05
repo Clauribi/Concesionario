@@ -17,4 +17,8 @@ public class Persona {
             throw new ExceptionParametrosInvalidos("El teléfono tiene que tener 9 dígitos.");
         this.telefono = telefono;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
 }

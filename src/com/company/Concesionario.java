@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Concesionario {
+    private DirectorComercial d1;
     private HashMap<Integer, Exposicion> listadoExposiciones;
     private HashMap<String, Coche> listadoCochesTotalesDefinitivo;
     private HashMap<String, VendedorComision> listadoVendedores;
@@ -22,17 +23,17 @@ public class Concesionario {
     }
 
     public void addCoche() throws ExceptionParametrosInvalidos {
-        System.out.printf("Matricula:");
+        System.out.println("Matricula:");
         String matricula = sc.next();
-        System.out.printf("Modelo:");
+        System.out.println("Modelo:");
         String modelo = sc.next();
-        System.out.printf("Marca:");
+        System.out.println("Marca:");
         String marca = sc.next();
-        System.out.printf("Compra:");
+        System.out.println("Compra:");
         double compra = sc.nextDouble();
-        System.out.printf("Venta:");
+        System.out.println("Venta:");
         double venta = sc.nextDouble();
-        System.out.printf("Tipo:");
+        System.out.println("Elige el tipo:");
         System.out.println("1.-Industrial.");
         System.out.println("2.-Todoterreno.");
         System.out.println("3.-Turismo.");
@@ -61,20 +62,37 @@ public class Concesionario {
         this.listadoCochesTotalesDefinitivo.put(cocheNew.getMatricula(), cocheNew);
     }
 
-    public ArrayList getCochesPorExposicion(int expo){
+    public ArrayList getCochesPorExposicion(int expo) {
         Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
         ArrayList<Coche> listaCoches = new ArrayList<>(valores);
         ArrayList<Coche> listaCochesEnExposicion = new ArrayList<>();
-        for (Coche c : listaCoches){
-            if (c.getExposicion().getNumExposicion() == expo){
+        for (Coche c : listaCoches) {
+            if (c.getExposicion().getNumExposicion() == expo) {
                 listaCochesEnExposicion.add(c);
             }
         }
         return listaCochesEnExposicion;
     }
 
-    public HashMap<Integer, Exposicion> getListadoExposiciones() {
-        return listadoExposiciones;
+    public void addVendedorComision() throws ExceptionParametrosInvalidos {
+        System.out.println("DNI:");
+        String dni = sc.next();
+        if (listadoVendedores.containsKey(dni))
+            throw new ExceptionParametrosInvalidos("Ya hay un vendedor con ese DNI.");
+        System.out.println("Nombre:");
+        String nombre = sc.next();
+        System.out.println("Dirección:");
+        String direccion = sc.next();
+        System.out.println("Teléfono:");
+        int telefono = sc.nextInt();
+        VendedorComision v1 = new VendedorComision(nombre, direccion, dni, telefono);
+        listadoVendedores.put(dni, v1);
+    }
+
+    public ArrayList getListadoVendedores() {
+        Collection<VendedorComision> valores = this.listadoVendedores.values();
+        ArrayList<VendedorComision> listadoTotal = new ArrayList<>(valores);
+        return listadoTotal;
     }
 
     public void menu() throws ExceptionParametrosInvalidos {
@@ -115,12 +133,12 @@ public class Concesionario {
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
-        String matricula;
-        String nombre = sc.next();
-        String direccion = sc.next();
+        System.out.println("Indica tu dni para acceder:");
         String dni = sc.next();
-        int telefono = sc.nextInt();
-        VendedorComision v1 = new VendedorComision(nombre, direccion, dni, telefono);
+        if (!listadoVendedores.containsKey(dni)) throw new ExceptionParametrosInvalidos("No está dado de alta.");
+        String matricula;
+        VendedorComision v1 = listadoVendedores.get(dni);
+        System.out.println("Bienvenido " + v1.getNombre());
         while (!salir) {
             System.out.println("Indica la acción a realizar:");
             System.out.println("1.-Vender un coche.");
@@ -155,29 +173,46 @@ public class Concesionario {
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
-        String nombre = sc.next();
-        String direccion = sc.next();
-        String dni = sc.next();
-        int telefono = sc.nextInt();
-        DirectorComercial d1 = new DirectorComercial(nombre, direccion, dni, telefono);
+        if (d1 == null) {
+            System.out.println("Nombre: ");
+            String nombre = sc.next();
+            System.out.println("Dirección: ");
+            String direccion = sc.next();
+            System.out.println("DNI: ");
+            String dni = sc.next();
+            System.out.println("Teléfono: ");
+            int telefono = sc.nextInt();
+            d1 = new DirectorComercial(nombre, direccion, dni, telefono);
+        }
         while (!salir) {
+            System.out.println("Bienvenido " + d1.getNombre());
             System.out.println("Elige que deseas hacer.");
             System.out.println("1.-Añadir un coche.");
             System.out.println("2.-Consultar coches en una exposición.");
-            System.out.println("3.-Salir.");
+            System.out.println("3.-Añadir vendedor.");
+            System.out.println("4.-Consultar listado vendedores,");
+            System.out.println("9.-Salir.");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
                     addCoche();
                     break;
                 case 2:
-                    System.out.println(getCochesPorExposicion(1).size());
+                    System.out.println("Indica la exposición:");
+                    int expo = sc.nextInt();
+                    System.out.println(getCochesPorExposicion(expo));
                     break;
                 case 3:
+                    addVendedorComision();
+                    break;
+                case 4:
+                    getListadoVendedores();
+                    break;
+                case 9:
                     salir = true;
                     break;
                 default:
-                    System.out.println("opcion incorrecta");
+                    System.out.println("Opción incorrecta.");
             }
         }
     }
