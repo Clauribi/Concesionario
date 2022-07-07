@@ -356,10 +356,9 @@ public class Concesionario {
             System.out.println("Bienvenido " + d1.getNombre());
             System.out.println("Elige que deseas hacer.");
             System.out.println("1.-Gestión coches.");
-            System.out.println("2.-Consultar coches en una exposición.");
+            System.out.println("2.-Gestión exposiciones.");
             System.out.println("3.-Gestión vendedores.");
-            System.out.println("3.-Gestión clientes.");
-            System.out.println("4.-Consultar listado vendedores.");
+            System.out.println("4.-Gestión clientes.");
             System.out.println("9.-Salir.");
             opcion = sc.nextInt();
             switch (opcion) {
