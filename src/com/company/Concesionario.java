@@ -61,6 +61,7 @@ public class Concesionario {
         Coche cocheNew = new Coche(marca, modelo, matricula, compra, venta, t, exposicion);
         this.listadoCochesTotalesDefinitivo.put(cocheNew.getMatricula(), cocheNew);
     }
+
     public void deleteCoche() throws ExceptionParametrosInvalidos {
         System.out.println("matricula:");
         String matricula = sc.next();
@@ -80,9 +81,13 @@ public class Concesionario {
                 case 2:
                     System.out.println("No se da de baja.");
                     break;
+                default:
+                    System.out.println("Opción incorrecta.");
+                    break;
             }
         }
     }
+
     public void changeCoche() throws ExceptionParametrosInvalidos {
         System.out.println("matricula:");
         String matricula = sc.next();
@@ -121,12 +126,14 @@ public class Concesionario {
             }
             System.out.println("Nº exposición: ");
             int expo = sc.nextInt();
-            if (!listadoExposiciones.containsKey(expo)) throw new ExceptionParametrosInvalidos("No existe la exposición");
+            if (!listadoExposiciones.containsKey(expo))
+                throw new ExceptionParametrosInvalidos("No existe la exposición");
             Exposicion exposicion = listadoExposiciones.get(expo);
             Coche cocheChange = new Coche(marca, modelo, matricula, compra, venta, t, exposicion);
             this.listadoCochesTotalesDefinitivo.put(matricula, cocheChange);
         }
     }
+
     public ArrayList getListadoCoches() {
         Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
         ArrayList<Coche> listadoTotalCoches = new ArrayList<>(valores);
@@ -157,8 +164,9 @@ public class Concesionario {
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
         VendedorComision v1 = new VendedorComision(nombre, direccion, dni, telefono);
-        listadoVendedores.put(dni, v1);
+        this.listadoVendedores.put(dni, v1);
     }
+
     public void deleteVendedorComision() throws ExceptionParametrosInvalidos {
         System.out.println("DNI:");
         String dni = sc.next();
@@ -178,12 +186,16 @@ public class Concesionario {
                 case 2:
                     System.out.println("No se da de baja.");
                     break;
+                default:
+                    System.out.println("Opción incorrecta.");
+                    break;
             }
         }
     }
+
     public void changeVendedorComision() throws ExceptionParametrosInvalidos {
-            System.out.println("DNI:");
-            String dni = sc.next();
+        System.out.println("DNI:");
+        String dni = sc.next();
         if (!listadoVendedores.containsKey(dni)) {
             throw new ExceptionParametrosInvalidos("No existe el vendedor con ese DNI.");
         } else {
@@ -204,6 +216,7 @@ public class Concesionario {
         ArrayList<VendedorComision> listadoTotal = new ArrayList<>(valores);
         return listadoTotal;
     }
+
     public void addCliente() throws ExceptionParametrosInvalidos {
         System.out.println("DNI:");
         String dni = sc.next();
@@ -218,6 +231,7 @@ public class Concesionario {
         Cliente c1 = new Cliente(nombre, direccion, dni, telefono);
         listadoClientes.put(dni, c1);
     }
+
     public void deleteCliente() throws ExceptionParametrosInvalidos {
         System.out.println("DNI:");
         String dni = sc.next();
@@ -231,15 +245,19 @@ public class Concesionario {
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
-                    this.listadoClientes.remove(dni);
                     System.out.println("Se ha dado de baja el cliente '" + dni + "'.");
+                    this.listadoClientes.remove(dni);
                     break;
                 case 2:
                     System.out.println("No se da de baja.");
                     break;
+                default:
+                    System.out.println("Opción incorrecta.");
+                    break;
             }
         }
     }
+
     public void changeCliente() throws ExceptionParametrosInvalidos {
         System.out.println("DNI:");
         String dni = sc.next();
@@ -257,6 +275,7 @@ public class Concesionario {
             listadoClientes.put(dni, cChange);
         }
     }
+
     public ArrayList getListadoClientes() {
         Collection<Cliente> valores = this.listadoClientes.values();
         ArrayList<Cliente> listadoTotalClientes = new ArrayList<>(valores);
@@ -273,7 +292,7 @@ public class Concesionario {
             System.out.println("1.-Vendedor.");
             System.out.println("2.-Director comercial.");
             System.out.println("3.-Mecánico.");
-            System.out.println("4.-Salir.");
+            System.out.println("9.-Salir del programa.");
             opcion = sc.nextInt();
 
             switch (opcion) {
@@ -286,7 +305,7 @@ public class Concesionario {
                 case 3:
                     gestionMecanico();
                     break;
-                case 4:
+                case 9:
                     System.out.println("Saliendo.....");
                     salir = true;
                     break;
@@ -314,7 +333,7 @@ public class Concesionario {
             System.out.println("3.-Consultar clientes.");
             System.out.println("4.-Consultar coches.");
             System.out.println("5.-Consultar exposiciones.");
-            System.out.println("6.-Salir.");
+            System.out.println("9.-Volver.");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -327,7 +346,20 @@ public class Concesionario {
                     matricula = sc.next();
 //                    v1.reservarCoche(matricula);
                     break;
-                case 6:
+                case 3:
+                    getListadoClientes();
+                    break;
+                case 4:
+                    getListadoCoches();
+                    break;
+                case 5:
+                    System.out.println("Indica el número de la exposición a consultar: ");
+                    int expo = sc.nextInt();
+                    if (!this.listadoExposiciones.containsKey(expo))
+                        throw new ExceptionParametrosInvalidos("La exposición no existe.");
+                    getCochesPorExposicion(expo);
+                    break;
+                case 9:
                     salir = true;
                     break;
                 default:
@@ -359,86 +391,112 @@ public class Concesionario {
             System.out.println("2.-Gestión exposiciones.");
             System.out.println("3.-Gestión vendedores.");
             System.out.println("4.-Gestión clientes.");
-            System.out.println("9.-Salir.");
+            System.out.println("9.-Volver.");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
-                    System.out.println("1.-Dar de alta un coche.");
-                    System.out.println("2.-Dar de baja un coche.");
-                    System.out.println("3.-Modificar un coche.");
-                    System.out.println("4.-Visualizar los coches");
-                    int option;
-                    option= sc.nextInt();
-                    switch (option){
-                        case 1:
-                            addCoche();
-                            break;
-                        case 2:
-                            deleteCoche();
-                            break;
-                        case 3:
-                            changeCoche();
-                            break;
-                        case 4:
-                            getListadoCoches();
-                        default:
-                            System.out.println("Opción incorrecta.");
+                    boolean salir2 = false;
+                    while (!salir2) {
+                        System.out.println("1.-Dar de alta un coche.");
+                        System.out.println("2.-Dar de baja un coche.");
+                        System.out.println("3.-Modificar un coche.");
+                        System.out.println("4.-Visualizar los coches");
+                        System.out.println("9.-Volver.");
+                        int option;
+                        option = sc.nextInt();
+                        switch (option) {
+                            case 1:
+                                addCoche();
+                                break;
+                            case 2:
+                                deleteCoche();
+                                break;
+                            case 3:
+                                changeCoche();
+                                break;
+                            case 4:
+                                getListadoCoches();
+                            case 9:
+                                salir2 = true;
+                                break;
+                            default:
+                                System.out.println("Opción incorrecta.");
+                        }
                     }
+                    break;
                 case 2:
                     System.out.println("Indica la exposición:");
                     int expo = sc.nextInt();
                     System.out.println(getCochesPorExposicion(expo));
                     break;
                 case 3:
-                    System.out.println("1.-Dar de alta un vendedor.");
-                    System.out.println("2.-Dar de baja un vendedor.");
-                    System.out.println("3.-Modificar un vendedor.");
-                    System.out.println("4.-Visualizar los vendedores");
-                    option= sc.nextInt();
-                    switch (option){
-                        case 1:
-                            addVendedorComision();
-                            break;
-                        case 2:
-                            deleteVendedorComision();
-                            break;
-                        case 3:
-                            changeVendedorComision();
-                            break;
-                        case 4:
-                            getListadoVendedores();
-                            break;
-                        default:
-                            System.out.println("Opción incorrecta.");
+                    boolean salir3 = false;
+                    while (!salir3) {
+                        System.out.println("1.-Dar de alta un vendedor.");
+                        System.out.println("2.-Dar de baja un vendedor.");
+                        System.out.println("3.-Modificar un vendedor.");
+                        System.out.println("4.-Visualizar los vendedores.");
+                        System.out.println("9.-Volver.");
+                        int option = sc.nextInt();
+                        switch (option) {
+                            case 1:
+                                addVendedorComision();
+                                break;
+                            case 2:
+                                deleteVendedorComision();
+                                break;
+                            case 3:
+                                changeVendedorComision();
+                                break;
+                            case 4:
+                                getListadoVendedores();
+                                break;
+                            case 9:
+                                salir3 = true;
+                                break;
+                            default:
+                                System.out.println("Opción incorrecta.");
+                                break;
+                        }
                     }
+                    break;
                 case 4:
-                    System.out.println("1.-Dar de alta un cliente.");
-                    System.out.println("2.-Dar de baja un cliente.");
-                    System.out.println("3.-Modificar un cliente.");
-                    System.out.println("4.-Visualizar los clientes.");
-                    option= sc.nextInt();
-                    switch (option){
-                        case 1:
-                            addCliente();
-                            break;
-                        case 2:
-                            deleteCliente();
-                            break;
-                        case 3:
-                            changeCliente();
-                            break;
-                        case 4:
-                            getListadoClientes();
-                            break;
-                        default:
-                            System.out.println("Opción incorrecta.");
+                    boolean salir4 = false;
+                    while (!salir4) {
+                        System.out.println("1.-Dar de alta un cliente.");
+                        System.out.println("2.-Dar de baja un cliente.");
+                        System.out.println("3.-Modificar un cliente.");
+                        System.out.println("4.-Visualizar los clientes.");
+                        System.out.println("9.-Volver.");
+                        int option = sc.nextInt();
+                        switch (option) {
+                            case 1:
+                                addCliente();
+                                break;
+                            case 2:
+                                deleteCliente();
+                                break;
+                            case 3:
+                                changeCliente();
+                                break;
+                            case 4:
+                                getListadoClientes();
+                                break;
+                            case 9:
+                                salir4 = true;
+                                break;
+                            default:
+                                System.out.println("Opción incorrecta.");
+                                break;
+                        }
                     }
-
+                    break;
                 case 9:
                     salir = true;
                     break;
                 default:
                     System.out.println("Opción incorrecta.");
+                    break;
             }
         }
     }
@@ -457,7 +515,7 @@ public class Concesionario {
             System.out.println("Elige que deseas hacer.");
             System.out.println("1.-Consultar reparaciones.");
             System.out.println("2.-Reparar coche.");
-            System.out.println("3.-Salir.");
+            System.out.println("9.-Volver.");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -489,16 +547,16 @@ public class Concesionario {
                             t = TipoReparacion.revision;
                             break;
                         default:
-                            System.out.println("Tipo erroneo");
+                            System.out.println("Tipo erróneo");
                             break;
                     }
                     m.repararCoche(t, matricula);
                     break;
-                case 3:
+                case 9:
                     salir = true;
                     break;
                 default:
-                    System.out.println("opcion incorrecta");
+                    System.out.println("Opción incorrecta");
                     break;
             }
         }
