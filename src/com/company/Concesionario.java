@@ -139,6 +139,65 @@ public class Concesionario {
         ArrayList<Coche> listadoTotalCoches = new ArrayList<>(valores);
         return listadoTotalCoches;
     }
+    public void addExposicion() throws ExceptionParametrosInvalidos {
+        System.out.println("Número de exposición:");
+        Integer numExpo = sc.nextInt();
+        if(listadoExposiciones.containsKey(numExpo)){
+            throw new ExceptionParametrosInvalidos("Ya hay una exposición con ese numero.");
+        }
+        System.out.println("Inserta la siguiente información:");
+        System.out.println("Dirección:");
+        String direccion = sc.next();
+        System.out.println("Teléfono:");
+        int telefono = sc.nextInt();
+        Exposicion ex1 = new Exposicion(numExpo, direccion, telefono);
+        this.listadoExposiciones.put(numExpo, ex1);
+    }
+    public void deleteExposicion() throws ExceptionParametrosInvalidos {
+        System.out.println("Número de exposición:");
+        Integer numExpo = sc.nextInt();
+        if (!listadoExposiciones.containsKey(numExpo)) {
+            throw new ExceptionParametrosInvalidos("No existe ese número de exposición.");
+        } else {
+            System.out.println("¿Estas seguro de querer dar de baja esta exposición?");
+            System.out.println("1.-Sí");
+            System.out.println("2.-No");
+            int opcion;
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    this.listadoExposiciones.remove(numExpo);
+                    System.out.println("Se ha dado de baja la exposición '" + numExpo + "'.");
+                    break;
+                case 2:
+                    System.out.println("No se da de baja.");
+                    break;
+                default:
+                    System.out.println("Opción incorrecta.");
+                    break;
+            }
+        }
+    }
+    public void changeExposicion() throws ExceptionParametrosInvalidos {
+        System.out.println("Número de exposición:");
+        Integer numExpo = sc.nextInt();
+        if (!listadoExposiciones.containsKey(numExpo)) {
+            throw new ExceptionParametrosInvalidos("No existe ese número de exposición.");
+        } else {
+            System.out.println("Introduzca de nuevo los datos de la exposición con sus modificaciones.");
+            System.out.println("Dirección:");
+            String direccion = sc.next();
+            System.out.println("Teléfono:");
+            int telefono = sc.nextInt();
+            Exposicion expoChange = new Exposicion(numExpo, direccion, telefono);
+            listadoExposiciones.put(numExpo, expoChange);
+        }
+    }
+    public ArrayList getListadoExposiciones() {
+        Collection<Exposicion> valores = this.listadoExposiciones.values();
+        ArrayList<Exposicion> listadoTotalExposiciones = new ArrayList<>(valores);
+        return listadoTotalExposiciones;
+    }
 
     public ArrayList getCochesPorExposicion(int expo) {
         Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
@@ -151,6 +210,7 @@ public class Concesionario {
         }
         return listaCochesEnExposicion;
     }
+
 
     public void addVendedorComision() throws ExceptionParametrosInvalidos {
         System.out.println("DNI:");
@@ -425,10 +485,40 @@ public class Concesionario {
                     }
                     break;
                 case 2:
-                    System.out.println("Indica la exposición:");
-                    int expo = sc.nextInt();
-                    System.out.println(getCochesPorExposicion(expo));
-                    break;
+                    boolean salir5 = false;
+                    while (!salir5) {
+                        System.out.println("1.-Dar de alta una exposición.");
+                        System.out.println("2.-Dar de baja una exposición.");
+                        System.out.println("3.-Modificar una exposición.");
+                        System.out.println("4.-Visualizar las exposiciones.");
+                        System.out.println("4.-Visualizar los coches de una exposición.");
+                        System.out.println("9.-Volver.");
+                        int option = sc.nextInt();
+                        switch (option) {
+                            case 1:
+                                addExposicion();
+                                break;
+                            case 2:
+                                deleteExposicion();
+                                break;
+                            case 3:
+                                changeExposicion();
+                                break;
+                            case 4:
+                                getListadoExposiciones();
+                                break;
+                            case 5:
+                                System.out.println("Indica la exposición:");
+                                int expo = sc.nextInt();
+                                System.out.println(getCochesPorExposicion(expo));
+                            case 9:
+                                salir5 = true;
+                                break;
+                            default:
+                                System.out.println("Opción incorrecta.");
+                                break;
+                        }
+                    }
                 case 3:
                     boolean salir3 = false;
                     while (!salir3) {
