@@ -27,6 +27,11 @@ public class Exposicion {
         this.telefono = telefono;
     }
 
+    public String getInfo(){
+        return "Exposición número " + this.numExposicion +
+                "\nDirección: " + this.direccion +
+                "\nTeléfono: " + this.telefono;
+    }
 
    /*   public void borrarCoche(Coche coche) throws ExceptionParametrosInvalidos {
       if (!this.listadoCoches.contains(coche))

@@ -6,6 +6,8 @@ public class Cliente extends Persona {
     private ArrayList<Coche> comprados = new ArrayList<>();
     private ArrayList<Coche> reservados = new ArrayList<>();
 
+
+
     public Cliente(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
         super(nombre, direccion, dni, telefono);
     }

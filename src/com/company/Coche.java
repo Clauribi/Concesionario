@@ -11,6 +11,11 @@ public class Coche {
     private TipoCoche tipo;
     private EstadoCoche estado;
     private Exposicion exposicion;
+    private Cliente cliente;
+
+    public Cliente getCliente() {
+        return cliente;
+    }
 
     private HashMap<String, Reparacion> reparaciones;
 
@@ -34,6 +39,10 @@ public class Coche {
         return reparaciones;
     }
 
+    public void setExposicion(Exposicion exposicion) {
+        this.exposicion = exposicion;
+    }
+
     public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, TipoCoche tipo, Exposicion exposicion) throws ExceptionParametrosInvalidos {
         if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
         this.marca = marca;
@@ -55,7 +64,7 @@ public class Coche {
 
     public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {
         if (expo == null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
-        this.exposicion = expo;
+        setExposicion(expo);
     }
 
     public void consultaReparaciones(String matricula) throws ExceptionParametrosInvalidos {
@@ -64,5 +73,15 @@ public class Coche {
         } else {
             throw new ExceptionParametrosInvalidos("La matricula no existe o no tiene reparaciones.");
         }
+    }
+
+    public String getInfo() {
+        return "\nMatrícula: " + this.matricula +
+                "\nMarca: " + this.marca +
+                "\nModelo: " + this.modelo +
+                "\nTipo: " + this.tipo +
+                "\nPrecio: " + this.precioVenta +
+                "\nEstado: " + this.estado +
+                "\nNúmero exposición: " + this.exposicion.getNumExposicion() + "\n";
     }
 }

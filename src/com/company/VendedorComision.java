@@ -5,6 +5,9 @@ import java.util.HashMap;
 public class VendedorComision extends Persona {
     private HashMap<String, Coche> cochesVendidos = new HashMap<>();
 
+    public HashMap<String, Coche> getCochesVendidos() {
+        return cochesVendidos;
+    }
 
     public VendedorComision(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
         super(nombre, direccion, dni, telefono);
