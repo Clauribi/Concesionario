@@ -18,7 +18,7 @@ public class Concesionario {
         this.listadoExposiciones.put(expo.getNumExposicion(), expo);
     }
 
-    public void menu() throws ExceptionParametrosInvalidos {
+    public void menu() {
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
@@ -37,7 +37,11 @@ public class Concesionario {
                     gestionVendedoresComision();
                     break;
                 case 3:
-                    gestionMecanico();
+                    try {
+                        gestionMecanico();
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 9:
                     System.out.println("Saliendo.....");
@@ -374,13 +378,37 @@ public class Concesionario {
             switch (opcion) {
                 case 1:
                     System.out.println("Indica la matricula del coche que quieres vender.");
+                    System.out.println("Listado de coches en Stock:");
+                    System.out.println(getCochesVenta());
+                    System.out.println("Listado de coches reservados:");
+                    System.out.println(getCochesReservados());
                     matricula = sc.next();
-//                    v1.venderCoche(matricula);
+                    Coche coche = listadoCochesTotalesDefinitivo.get(matricula);
+                    System.out.println("Indica el DNI del cliente:");
+                    dni = sc.next();
+                    Cliente cliente = listadoClientes.get(dni);
+                    try {
+                        v1.venderCoche(coche, cliente);
+                        cliente.agregarCocheComprado(coche);
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 2:
                     System.out.println("Indica la matricula del coche que quieres reservar.");
+                    System.out.println("Listado de coches en Stock:");
+                    System.out.println(getCochesVenta());
                     matricula = sc.next();
-//                    v1.reservarCoche(matricula);
+                    coche = listadoCochesTotalesDefinitivo.get(matricula);
+                    System.out.println("Indica el DNI del cliente:");
+                    dni = sc.next();
+                    cliente = listadoClientes.get(dni);
+                    try {
+                        v1.reservarCoche(coche, cliente);
+                        cliente.agregarCocheReservado(coche);
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 3:
                     getListadoClientes();
@@ -690,18 +718,19 @@ public class Concesionario {
     }
 
     private void changeExposicion() throws ExceptionParametrosInvalidos {
-        System.out.println("Número de exposición:");
+        System.out.println("Número de exposición a modificar:");
         Integer numExpo = sc.nextInt();
         if (!listadoExposiciones.containsKey(numExpo)) {
             throw new ExceptionParametrosInvalidos("No existe ese número de exposición.");
         } else {
-//            System.out.println("Introduzca de nuevo los datos de la exposición con sus modificaciones.");
+            Exposicion expoChange = listadoExposiciones.get(numExpo);
+            System.out.println("Introduzca de nuevo los datos de la exposición con sus modificaciones.");
             System.out.println("Dirección:");
             String direccion = sc.next();
+            expoChange.setDireccion(direccion);
             System.out.println("Teléfono:");
             int telefono = sc.nextInt();
-            Exposicion expoChange = new Exposicion(numExpo, direccion, telefono);
-            this.listadoExposiciones.put(numExpo, expoChange);
+            expoChange.setTelefono(telefono);
         }
     }
 
@@ -828,22 +857,27 @@ public class Concesionario {
         if (!listadoClientes.containsKey(dni)) {
             throw new ExceptionParametrosInvalidos("No existe el cliente con ese DNI.");
         } else {
-            System.out.println("¿Estas seguro de querer dar de baja a este cliente?");
-            System.out.println("1.-Sí");
-            System.out.println("2.-No");
-            int opcion;
-            opcion = sc.nextInt();
-            switch (opcion) {
-                case 1:
-                    System.out.println("Se ha dado de baja el cliente '" + dni + "'.");
-                    this.listadoClientes.remove(dni);
-                    break;
-                case 2:
-                    System.out.println("No se da de baja.");
-                    break;
-                default:
-                    System.out.println("Opción incorrecta.");
-                    break;
+            Cliente cliente = listadoClientes.get(dni);
+            if (cliente.getComprados().isEmpty() && cliente.getReservados().isEmpty()) {
+                System.out.println("¿Estas seguro de querer dar de baja a este cliente?");
+                System.out.println("1.-Sí");
+                System.out.println("2.-No");
+                int opcion;
+                opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1:
+                        System.out.println("Se ha dado de baja el cliente '" + dni + "'.");
+                        this.listadoClientes.remove(dni);
+                        break;
+                    case 2:
+                        System.out.println("No se da de baja.");
+                        break;
+                    default:
+                        System.out.println("Opción incorrecta.");
+                        break;
+                }
+            } else {
+                throw new ExceptionParametrosInvalidos("El cliente tiene algún coche reservado o comprado. Consúltelo.");
             }
         }
     }
@@ -912,7 +946,7 @@ public class Concesionario {
         return cochesVendidos.toString();
     }
 
-    private String mostrarCliente(String matricula){
+    private String mostrarCliente(String matricula) {
         Coche c = listadoCochesTotalesDefinitivo.get(matricula);
         return c.getCliente().getNombre();
     }

@@ -17,6 +17,18 @@ public class Exposicion {
         this.numExposicion = numExposicion;
     }
 
+    public void setTelefono(int telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public void setCochesExpo(HashMap<String, Coche> cochesExpo) {
+        this.cochesExpo = cochesExpo;
+    }
+
     public Exposicion(int numExposicion, String direccion, int telefono) throws ExceptionParametrosInvalidos {
         if (numExposicion == 0) throw new ExceptionParametrosInvalidos("El número de la exposición no puede ser 0.");
         this.numExposicion = numExposicion;
@@ -28,9 +40,9 @@ public class Exposicion {
     }
 
     public String getInfo(){
-        return "Exposición número " + this.numExposicion +
+        return "\nExposición número " + this.numExposicion +
                 "\nDirección: " + this.direccion +
-                "\nTeléfono: " + this.telefono;
+                "\nTeléfono: " + this.telefono + "\n";
     }
 
    /*   public void borrarCoche(Coche coche) throws ExceptionParametrosInvalidos {

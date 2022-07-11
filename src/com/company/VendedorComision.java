@@ -3,9 +3,9 @@ package com.company;
 import java.util.HashMap;
 
 public class VendedorComision extends Persona {
-    private HashMap<String, Coche> cochesVendidos = new HashMap<>();
+    private HashMap<String, Cliente> cochesVendidos = new HashMap<>();
 
-    public HashMap<String, Coche> getCochesVendidos() {
+    public HashMap<String, Cliente> getCochesVendidos() {
         return cochesVendidos;
     }
 
@@ -13,25 +13,28 @@ public class VendedorComision extends Persona {
         super(nombre, direccion, dni, telefono);
     }
 
+    public void venderCoche(Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
+        if (coche.getEstado() == EstadoCoche.enVenta) {
+            coche.setEstado(EstadoCoche.vendido);
+            cochesVendidos.put(coche.getMatricula(), cliente);
+        }else if (coche.getEstado() == EstadoCoche.reservado){
+            if (coche.getCliente() == cliente) {
+                coche.setEstado(EstadoCoche.vendido);
+                cochesVendidos.put(coche.getMatricula(), cliente);
+            } else {
+                throw new ExceptionParametrosInvalidos("El coche con matricula " + coche.getMatricula() + " está reservado por " + coche.getCliente());
+            }
+        } else {
+            throw new ExceptionParametrosInvalidos("El coche no se puede vender porque el estado es " + coche.getEstado());
+        }
+    }
 
+    public void reservarCoche(Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
+        if (coche.getEstado() == EstadoCoche.enVenta){
+            coche.setEstado(EstadoCoche.reservado);
+        } else {
+            throw new ExceptionParametrosInvalidos("El coche no se puede reservar porque el estado es " + coche.getEstado());
+        }
+    }
 
-//    public void venderCoche(String matricula) throws ExceptionParametrosInvalidos {
-//        if (coche.getCochesReservados().containsKey(matricula)) {
-//            this.coche = coche.getCochesReservados().get(matricula);
-//            this.coche.setEstado(EstadoCoche.vendido);
-//            this.cochesVendidos.put(matricula, coche);
-//        } else if (coche.getCochesVenta().containsKey(matricula)) {
-//            coche = coche.getCochesVenta().get(matricula);
-//            coche.setEstado(EstadoCoche.vendido);
-//            this.cochesVendidos.put(matricula,coche);
-//        } else {
-//            throw new ExceptionParametrosInvalidos("El coche no está en venta ni reservado.");
-//        }
-//    }
-//    public void reservarCoche(String matricula) throws ExceptionParametrosInvalidos {
-//        if(coche.getCochesVenta().containsKey(matricula)){
-//            coche = coche.getCochesVenta().get(matricula);
-//            coche.setEstado(EstadoCoche.reservado);
-//        } else throw new ExceptionParametrosInvalidos("El coche no está en venta.");
-//    }
 }

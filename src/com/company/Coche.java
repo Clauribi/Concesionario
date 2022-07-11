@@ -17,6 +17,10 @@ public class Coche {
         return cliente;
     }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     private HashMap<String, Reparacion> reparaciones;
 
     public Exposicion getExposicion() {
@@ -74,6 +78,7 @@ public class Coche {
             throw new ExceptionParametrosInvalidos("La matricula no existe o no tiene reparaciones.");
         }
     }
+
 
     public String getInfo() {
         return "\nMatrícula: " + this.matricula +
