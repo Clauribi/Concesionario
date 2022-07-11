@@ -37,4 +37,11 @@ public class VendedorComision extends Persona {
         }
     }
 
+    public String getInfo(){
+        return "\nNombre: " + this.getNombre() +
+                "\nDNI: " + this.getDni() +
+                "\nTeléfono: " + this.getTelefono() +
+                "\nDirección: " + this.getDireccion() + "\n";
+    }
+
 }

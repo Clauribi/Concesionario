@@ -19,6 +19,7 @@ public class Concesionario {
     }
 
     public void menu() {
+        DirectorComercial d1 = null;
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
@@ -31,7 +32,7 @@ public class Concesionario {
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
-                    gestionDirectorComercial();
+                    gestionDirectorComercial(d1);
                     break;
                 case 2:
                     gestionVendedoresComision();
@@ -54,11 +55,10 @@ public class Concesionario {
         }
     }
 
-    private void gestionDirectorComercial() {
+    private void gestionDirectorComercial(DirectorComercial d1) {
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
-        DirectorComercial d1 = null;
         if (d1 == null) {
             System.out.println("Nombre: ");
             String nombre = sc.next();
@@ -235,7 +235,7 @@ public class Concesionario {
                     }
                     break;
                 case 4:
-                    getListadoVendedores();
+                    System.out.println(getDatosVendedores());
                     break;
                 case 9:
                     salir3 = true;
@@ -727,10 +727,10 @@ public class Concesionario {
             System.out.println("Introduzca de nuevo los datos de la exposición con sus modificaciones.");
             System.out.println("Dirección:");
             String direccion = sc.next();
-            expoChange.setDireccion(direccion);
             System.out.println("Teléfono:");
             int telefono = sc.nextInt();
             expoChange.setTelefono(telefono);
+            expoChange.setDireccion(direccion);
         }
     }
 
@@ -836,6 +836,14 @@ public class Concesionario {
         return listadoTotal;
     }
 
+    private String getDatosVendedores(){
+        ArrayList<String> datosVendedores = new ArrayList<>();
+        for (VendedorComision v : listadoVendedores.values()){
+            datosVendedores.add(v.getInfo());
+        }
+        return datosVendedores.toString();
+    }
+
     private void addCliente() throws ExceptionParametrosInvalidos {
         System.out.println("DNI:");
         String dni = sc.next();
@@ -907,40 +915,40 @@ public class Concesionario {
     }
 
     private String getCochesVenta() {
-        ArrayList<Coche> cochesVenta = new ArrayList<>();
+        ArrayList<String> cochesVenta = new ArrayList<>();
         for (Coche c : listadoCochesTotalesDefinitivo.values()) {
             if (c.getEstado() == EstadoCoche.enVenta) {
-                cochesVenta.add(c);
+                cochesVenta.add(c.getInfo());
             }
         }
         return cochesVenta.toString();
     }
 
     private String getCochesReservados() {
-        ArrayList<Coche> cochesReservados = new ArrayList<>();
+        ArrayList<String> cochesReservados = new ArrayList<>();
         for (Coche c : listadoCochesTotalesDefinitivo.values()) {
             if (c.getEstado() == EstadoCoche.reservado) {
-                cochesReservados.add(c);
+                cochesReservados.add(c.getInfo());
             }
         }
         return cochesReservados.toString();
     }
 
     private String getCochesReparacion() {
-        ArrayList<Coche> cochesReparacion = new ArrayList<>();
+        ArrayList<String> cochesReparacion = new ArrayList<>();
         for (Coche c : listadoCochesTotalesDefinitivo.values()) {
             if (c.getEstado() == EstadoCoche.reparando) {
-                cochesReparacion.add(c);
+                cochesReparacion.add(c.getInfo());
             }
         }
         return cochesReparacion.toString();
     }
 
     private String getCochesVendidos() {
-        ArrayList<Coche> cochesVendidos = new ArrayList<>();
+        ArrayList<String> cochesVendidos = new ArrayList<>();
         for (Coche c : listadoCochesTotalesDefinitivo.values()) {
             if (c.getEstado() == EstadoCoche.vendido) {
-                cochesVendidos.add(c);
+                cochesVendidos.add(c.getInfo());
             }
         }
         return cochesVendidos.toString();

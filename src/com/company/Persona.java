@@ -25,4 +25,12 @@ public class Persona {
     public String getDni() {
         return dni;
     }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public int getTelefono() {
+        return telefono;
+    }
 }
