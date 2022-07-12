@@ -33,6 +33,46 @@ public class Concesionario {
         this.listadoExposiciones.put(expo.getNumExposicion(), expo);
     }
 
+    public String verCochesVenta() {
+        ArrayList<String> cochesVenta = new ArrayList<>();
+        for (Coche c : listadoCochesTotalesDefinitivo.values()) {
+            if (c.getEstado() == EstadoCoche.enVenta) {
+                cochesVenta.add(c.getInfo());
+            }
+        }
+        return cochesVenta.toString();
+    }
+
+    public String verCochesReservados() {
+        ArrayList<String> cochesReservados = new ArrayList<>();
+        for (Coche c : listadoCochesTotalesDefinitivo.values()) {
+            if (c.getEstado() == EstadoCoche.reservado) {
+                cochesReservados.add(c.getInfo());
+            }
+        }
+        return cochesReservados.toString();
+    }
+
+    public String verCochesReparacion() {
+        ArrayList<String> cochesReparacion = new ArrayList<>();
+        for (Coche c : listadoCochesTotalesDefinitivo.values()) {
+            if (c.getEstado() == EstadoCoche.reparando) {
+                cochesReparacion.add(c.getInfo());
+            }
+        }
+        return cochesReparacion.toString();
+    }
+
+    public String verCochesVendidos() {
+        ArrayList<String> cochesVendidos = new ArrayList<>();
+        for (Coche c : listadoCochesTotalesDefinitivo.values()) {
+            if (c.getEstado() == EstadoCoche.vendido) {
+                cochesVendidos.add(c.getInfo());
+            }
+        }
+        return cochesVendidos.toString();
+    }
+
     public void existeVendedor(String dni) throws ExceptionParametrosInvalidos {
         if (!listadoVendedores.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe vendedor.");
     }
@@ -81,56 +121,55 @@ public class Concesionario {
         expo.updateInfo(direccion, telefono);
     }
 
-
-    public void changeCocheExposicion() throws ExceptionParametrosInvalidos {
-        int expo = 0;
-        Coche c = null;
-        String matricula = null;
-        boolean noVenta = false;
-        boolean existe = false;
-        while (!noVenta) {
-            System.out.println("Indica la matrícula del coche a cambiar: ");
-            for (Coche lista : listadoCochesTotalesDefinitivo.values()) {
-                if (lista.getEstado() == EstadoCoche.enVenta) {
-                    System.out.println(lista.getMatricula());
-                }
-            }
-            matricula = sc.next();
-            if (!listadoCochesTotalesDefinitivo.containsKey(matricula)) {
-                System.out.println("La matrícula no está en la lista. Indica una matrícula correcta o escribe 'salir' para cancelar.");
-                matricula = sc.next();
-                if (matricula == "salir") {
-                    noVenta = true;
-                }
-            }
-            c = listadoCochesTotalesDefinitivo.get(matricula);
-            noVenta = true;
-        }
-        if (c == null) existe = true;
-        while (!existe) {
-            System.out.println("Indica la exposición de destino:");
-            for (Exposicion lista : listadoExposiciones.values()) {
-                System.out.println(lista.getNumExposicion());
-            }
-            expo = sc.nextInt();
-            if (!listadoExposiciones.containsKey(expo)) {
-                System.out.println("La exposición no existe.");
-            } else if (c.getExposicion().getNumExposicion() == expo) {
-                System.out.println("El cambio no se va a realizar porque el coche ya estaba en esa exposición");
-                existe = true;
-            } else {
-                Exposicion exposicion = listadoExposiciones.get(expo);
-                try {
-                    c.cambiarExposicion(exposicion);
-                } catch (ExceptionParametrosInvalidos e) {
-                    System.out.println(e.getMessage());
-                }
-                System.out.println("Se ha realizado el cambio del coche con matrícula " + c.getMatricula() + " a la siguiente exposición:\n"
-                        + exposicion.getInfo());
-                existe = true;
+    public ArrayList<Coche> listadoCochesExposicion(int numExpo) {
+        ArrayList<Coche> listaCochesExpo = new ArrayList<>();
+        for (Coche c : listadoCochesTotalesDefinitivo.values()) {
+            if (c.getExposicion().getNumExposicion() == numExpo) {
+                listaCochesExpo.add(c);
             }
         }
+        return listaCochesExpo;
     }
+
+    public String verCochesExpo(int numExpo) {
+        ArrayList<String> datosCoches = new ArrayList<>();
+        for (Coche c : listadoCochesExposicion(numExpo)) {
+            datosCoches.add(c.getInfo());
+        }
+        return datosCoches.toString();
+    }
+
+    public String verExpo(int numExpo) {
+        Exposicion expo = listadoExposiciones.get(numExpo);
+        return expo.getInfo();
+    }
+
+    public String verListaExposiciones() {
+        ArrayList<String> verLista = new ArrayList<>();
+        for (Exposicion expo : listadoExposiciones.values()) {
+            verLista.add(expo.getInfo());
+        }
+        return verLista.toString();
+    }
+
+    public ArrayList<Coche> listaCoches() {
+        Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
+        ArrayList<Coche> listadoTotalCoches = new ArrayList<>(valores);
+        return listadoTotalCoches;
+    }
+
+    public ArrayList<Exposicion> listaExposiciones() {
+        Collection<Exposicion> valores = this.listadoExposiciones.values();
+        ArrayList<Exposicion> listadoTotalExposiciones = new ArrayList<>(valores);
+        return listadoTotalExposiciones;
+    }
+
+    public void changeCocheExposicion(String matricula, int numExpo) throws ExceptionParametrosInvalidos {
+        Coche coche = listadoCochesTotalesDefinitivo.get(matricula);
+        Exposicion expo = listadoExposiciones.get(numExpo);
+        coche.cambiarExposicion(expo);
+    }
+
 
     public void addCoche(String marca, String modelo, String matricula, double compra, double venta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
         Coche cocheNew = new Coche(marca, modelo, matricula, compra, venta, t, exposicion);
@@ -155,7 +194,7 @@ public class Concesionario {
     public void deleteCliente(String dni) throws ExceptionParametrosInvalidos {
         Cliente c1 = listadoClientes.get(dni);
         if (c1.getComprados().isEmpty() && c1.getReservados().isEmpty()) {
-            this.listadoVendedores.remove(dni);
+            this.listadoClientes.remove(dni);
         } else
             throw new ExceptionParametrosInvalidos("El cliente tiene coches reservados o comprados. NO SE PUEDE BORRAR.");
     }
@@ -164,6 +203,14 @@ public class Concesionario {
         Cliente c = listadoClientes.get(dni);
         c.updateInfo(nombre, direccion, telefono);
 
+    }
+
+    public boolean enVenta(String matricula) {
+        Coche c = listadoCochesTotalesDefinitivo.get(matricula);
+        if (c.getEstado() == EstadoCoche.enVenta){
+            return true;
+        }
+        return false;
     }
 }
 
