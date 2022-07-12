@@ -12,16 +12,52 @@ public class Coche {
     private EstadoCoche estado;
     private Exposicion exposicion;
     private Cliente cliente;
+    private HashMap<String, Reparacion> reparaciones;
 
-    public Cliente getCliente() {
-        return cliente;
+    public void setMarca(String marca) throws ExceptionParametrosInvalidos {
+        if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
+        this.marca = marca;
+    }
+
+    public void setModelo(String modelo) throws ExceptionParametrosInvalidos {
+        if (modelo == null) throw new ExceptionParametrosInvalidos("El modelo no puede ser null.");
+        this.modelo = modelo;
+    }
+
+    public void setMatricula(String matricula) throws ExceptionParametrosInvalidos {
+        if (matricula == null) throw new ExceptionParametrosInvalidos("La matrícula no puede ser null.");
+        this.matricula = matricula;
+    }
+
+    public void setPrecioCompra(double precioCompra) throws ExceptionParametrosInvalidos {
+        if (precioCompra < 0) throw new ExceptionParametrosInvalidos("El precio de compra no puede ser inferior a 0.");
+        this.precioCompra = precioCompra;
+    }
+
+    public void setPrecioVenta(double precioVenta) throws ExceptionParametrosInvalidos {
+        if (precioVenta <= precioCompra)
+            throw new ExceptionParametrosInvalidos("El precio de venta no puede ser inferior o igual al precio de compra.");
+        this.precioVenta = precioVenta;
+    }
+
+    public void setTipo(TipoCoche tipo) throws ExceptionParametrosInvalidos {
+        if (tipo == null)
+            throw new ExceptionParametrosInvalidos("Los tipos de vehículos permitidos son: 'turismo', 'industrial' o 'todoterreno'");
+        this.tipo = tipo;
+    }
+
+    public void setExposicion(Exposicion exposicion) throws ExceptionParametrosInvalidos {
+        if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposición no existe.");
+        this.exposicion = exposicion;
     }
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-    private HashMap<String, Reparacion> reparaciones;
+    public Cliente getCliente() {
+        return cliente;
+    }
 
     public Exposicion getExposicion() {
         return exposicion;
@@ -43,26 +79,14 @@ public class Coche {
         return reparaciones;
     }
 
-    public void setExposicion(Exposicion exposicion) {
-        this.exposicion = exposicion;
-    }
-
     public Coche(String marca, String modelo, String matricula, double precioCompra, double precioVenta, TipoCoche tipo, Exposicion exposicion) throws ExceptionParametrosInvalidos {
-        if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
-        this.marca = marca;
-        if (modelo == null) throw new ExceptionParametrosInvalidos("El modelo no puede ser null.");
-        this.modelo = modelo;
-        if (matricula == null) throw new ExceptionParametrosInvalidos("La matrícula no puede ser null.");
-        this.matricula = matricula;
-        this.precioCompra = precioCompra;
-        if (precioVenta <= precioCompra)
-            throw new ExceptionParametrosInvalidos("El precio de venta no puede ser inferior o igual al precio de compra.");
-        this.precioVenta = precioVenta;
-        if (tipo == null)
-            throw new ExceptionParametrosInvalidos("Los tipos de vehículos permitidos son: 'turismo', 'industrial' o 'todoterreno'");
-        this.tipo = tipo;
-        if (exposicion == null) throw new ExceptionParametrosInvalidos("La exposición no existe.");
-        this.exposicion = exposicion;
+        setMarca(marca);
+        setModelo(modelo);
+        setMatricula(matricula);
+        setPrecioCompra(precioCompra);
+        setPrecioVenta(precioVenta);
+        setTipo(tipo);
+        setExposicion(exposicion);
         this.estado = EstadoCoche.enVenta;
     }
 
