@@ -32,17 +32,22 @@ public class Concesionario {
         this.listadoVendedores = new HashMap<>();
         this.listadoExposiciones.put(expo.getNumExposicion(), expo);
     }
+
     public void existeVendedor(String dni) throws ExceptionParametrosInvalidos {
-        if(!listadoVendedores.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe vendedor.");
+        if (!listadoVendedores.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe vendedor.");
     }
+
     public void existeCliente(String dni) throws ExceptionParametrosInvalidos {
-        if(!listadoClientes.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe cliente.");
+        if (!listadoClientes.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe cliente.");
     }
+
     public void existeCoche(String matricula) throws ExceptionParametrosInvalidos {
-        if(!listadoCochesTotalesDefinitivo.containsKey(matricula)) throw new ExceptionParametrosInvalidos("No existe coche.");
+        if (!listadoCochesTotalesDefinitivo.containsKey(matricula))
+            throw new ExceptionParametrosInvalidos("No existe coche.");
     }
+
     public void existeExposicion(int numExpo) throws ExceptionParametrosInvalidos {
-        if(!listadoExposiciones.containsKey(numExpo)) throw new ExceptionParametrosInvalidos("No existe exposición.");
+        if (!listadoExposiciones.containsKey(numExpo)) throw new ExceptionParametrosInvalidos("No existe exposición.");
     }
 
     public void addVendedorComision(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
@@ -58,9 +63,10 @@ public class Concesionario {
     }
 
     public void changeVendedorComision(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
-        VendedorComision v =listadoVendedores.get(dni);
+        VendedorComision v = listadoVendedores.get(dni);
         v.updateInfo(nombre, direccion, telefono);
     }
+
     public void addExposicion(int numExpo, String direccion, int telefono) throws ExceptionParametrosInvalidos {
         Exposicion ex1 = new Exposicion(numExpo, direccion, telefono);
         this.listadoExposiciones.put(numExpo, ex1);
@@ -69,9 +75,10 @@ public class Concesionario {
     public void deleteExposicion(int numExpo) {
         this.listadoExposiciones.remove(numExpo);
     }
+
     public void changeExposicion(int numExpo, String direccion, int telefono) throws ExceptionParametrosInvalidos {
-    Exposicion expo = listadoExposiciones.get(numExpo);
-    expo.updateInfo(direccion, telefono);
+        Exposicion expo = listadoExposiciones.get(numExpo);
+        expo.updateInfo(direccion, telefono);
     }
 
 
@@ -124,4 +131,40 @@ public class Concesionario {
             }
         }
     }
+
+    public void addCoche(String marca, String modelo, String matricula, double compra, double venta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
+        Coche cocheNew = new Coche(marca, modelo, matricula, compra, venta, t, exposicion);
+        this.listadoCochesTotalesDefinitivo.put(cocheNew.getMatricula(), cocheNew);
+    }
+
+    public void deleteCoche(String matricula) throws ExceptionParametrosInvalidos {
+        this.listadoCochesTotalesDefinitivo.remove(matricula);
+
+    }
+
+    public void changeCoche(String marca, String modelo, String matricula, double compra, double venta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
+        Coche c = listadoCochesTotalesDefinitivo.get(matricula);
+        c.updateInfo(marca, modelo, compra, venta, t, exposicion);
+    }
+
+    public void addCliente(String dni, String nombre, String direccion, int telefono) throws ExceptionParametrosInvalidos {
+        Cliente c1 = new Cliente(nombre, direccion, dni, telefono);
+        listadoClientes.put(dni, c1);
+    }
+
+    public void deleteCliente(String dni) throws ExceptionParametrosInvalidos {
+        Cliente c1 = listadoClientes.get(dni);
+        if (c1.getComprados().isEmpty() && c1.getReservados().isEmpty()) {
+            this.listadoVendedores.remove(dni);
+        } else
+            throw new ExceptionParametrosInvalidos("El cliente tiene coches reservados o comprados. NO SE PUEDE BORRAR.");
+    }
+
+    public void changeCliente(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
+        Cliente c = listadoClientes.get(dni);
+        c.updateInfo(nombre, direccion, telefono);
+
+    }
 }
+
+

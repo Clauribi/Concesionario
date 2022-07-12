@@ -103,6 +103,15 @@ public class Coche {
         }
     }
 
+    public void updateInfo(String marca, String modelo, double precioCompra, double precioVenta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
+        setMarca(marca);
+        setModelo(modelo);
+        setPrecioCompra(precioCompra);
+        setPrecioVenta(precioVenta);
+        setTipo(t);
+        setExposicion(exposicion);
+    }
+
 
     public String getInfo() {
         return "\nMatrícula: " + this.matricula +
