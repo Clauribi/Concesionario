@@ -1,16 +1,17 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Cliente extends Persona {
-    private HashMap<String, Coche> comprados = new HashMap<>();
-    private HashMap<String, Coche> reservados = new HashMap<>();
+    private ArrayList<Coche> comprados = new ArrayList<>();
+    private ArrayList<Coche> reservados = new ArrayList<>();
 
-    public HashMap<String, Coche> getComprados() {
+    public ArrayList<Coche> getComprados() {
         return comprados;
     }
 
-    public HashMap<String, Coche> getReservados() {
+    public ArrayList<Coche> getReservados() {
         return reservados;
     }
 
@@ -19,11 +20,11 @@ public class Cliente extends Persona {
     }
 
     public void agregarCocheComprado(Coche coche) {
-        this.comprados.put(coche.getMatricula(), coche);
+        this.comprados.add(coche);
     }
 
     public void agregarCocheReservado(Coche coche) {
-        this.reservados.put(coche.getMatricula(), coche);
+        this.reservados.add(coche);
     }
 
 }

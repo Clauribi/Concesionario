@@ -38,12 +38,16 @@ public class Concesionario {
         this.listadoExposiciones.put(expo.getNumExposicion(), expo);
     }
 
+    public ArrayList<Coche> cochesReservadosCliente(String dni){
+        Cliente c = listadoClientes.get(dni);
+        return c.getReservados();
+    }
+
     public void cocheAReparar(String dni, String matricula, TipoReparacion tipo) throws ExceptionParametrosInvalidos {
         Mecanico m = listadoMecanicos.get(dni);
         Coche c =listadoCochesTotalesDefinitivo.get(matricula);
         if (enVenta(matricula)){
             m.repararCoche(tipo, c);
-            c.setEstado(EstadoCoche.reparando);
         } else throw new ExceptionParametrosInvalidos("El coche no está en venta, no se puede reparar.");
     }
 

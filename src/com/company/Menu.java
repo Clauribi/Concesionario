@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -9,6 +10,20 @@ public class Menu {
     private Concesionario concesionario = new Concesionario();
 
     public Menu() throws ExceptionParametrosInvalidos {
+    }
+
+    private String consultarReservas(){
+        System.out.println("Indica el dni del cliente a consultar:");
+        System.out.println(concesionario.verListaClientes());
+        String dni = sc.next();
+        try {
+            concesionario.existeCliente(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+        Cliente c = concesionario.getListadoClientes().get(dni);
+        System.out.println(c.getInfo());
+        System.out.println(concesionario.cochesReservadosCliente(dni).toString());
     }
 
     private void altaVendedorComision() throws ExceptionParametrosInvalidos {
@@ -486,6 +501,47 @@ public class Menu {
         }
     }
 
+    private void mandarRepararCoche(String dni) {
+        System.out.println("Indica el coche que quieres reparar.");
+        System.out.println(concesionario.verCochesVenta());
+        String matricula = sc.next();
+        try {
+            concesionario.existeCoche(matricula);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Indica el tipo de reparación a realizar: ");
+        System.out.println("1.-Chapa.");
+        System.out.println("2.-Eléctrica.");
+        System.out.println("3.-Mecánica.");
+        System.out.println("4.-Revisión.");
+        TipoReparacion t = null;
+        int tipo;
+        tipo = sc.nextInt();
+        switch (tipo) {
+            case 1:
+                t = TipoReparacion.chapa;
+                break;
+            case 2:
+                t = TipoReparacion.electrica;
+                break;
+            case 3:
+                t = TipoReparacion.mecanica;
+                break;
+            case 4:
+                t = TipoReparacion.revision;
+                break;
+            default:
+                System.out.println("Tipo erróneo");
+                break;
+        }
+        try {
+            concesionario.cocheAReparar(dni, matricula, t);
+        }catch (ExceptionParametrosInvalidos e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     public void menu() {
         DirectorComercial d1 = null;
@@ -554,7 +610,8 @@ public class Menu {
             System.out.println("2.-Gestión exposiciones.");
             System.out.println("3.-Gestión vendedores.");
             System.out.println("4.-Gestión clientes.");
-            System.out.println("5.-Consultas.");
+            System.out.println("5.-Gestión mecánicos.");
+            System.out.println("6.-Consultas.");
             System.out.println("9.-Volver.");
             opcion = sc.nextInt();
             switch (opcion) {
@@ -571,6 +628,9 @@ public class Menu {
                     gestionClientes(sc);
                     break;
                 case 5:
+                    gestionMecanicos(sc);
+                    break;
+                case 6:
                     try {
                         consultas(sc);
                     } catch (ExceptionParametrosInvalidos e) {
@@ -619,7 +679,7 @@ public class Menu {
                     System.out.println("El sueldo es: " + sueldo);
                     break;
                 case 5:
-                    System.out.println();
+                    System.out.println(consultarReservas());
                     break;
                 case 6:
                     System.out.println("Elige el coche que quieres consultar de la lista: ");
@@ -671,6 +731,60 @@ public class Menu {
                 case 4:
                     System.out.println(concesionario.verListaClientes());
                     break;
+                case 9:
+                    salir4 = true;
+                    break;
+                default:
+                    System.out.println("Opción incorrecta.");
+                    break;
+            }
+        }
+    }
+
+    private void gestionMecanicos(Scanner sc) {
+        boolean salir4 = false;
+        while (!salir4) {
+            System.out.println("1.-Dar de alta un mecánico.");
+            System.out.println("2.-Dar de baja un mecánico.");
+            System.out.println("3.-Modificar un mecánico.");
+            System.out.println("4.-Visualizar los mecánicos.");
+            System.out.println("5.-Reparar un coche.");
+            System.out.println("9.-Volver.");
+            int option = sc.nextInt();
+            switch (option) {
+                case 1:
+                    try {
+                        altaMecanico();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 2:
+                    try {
+                        bajaMecanico();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 3:
+                    try {
+                        modificarMecanico();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 4:
+                    System.out.println(concesionario.verListaMecanicos());
+                    break;
+                case 5:
+                    System.out.println("Indica el dni del mecánico que va a realizar la reparación:");
+                    System.out.println(concesionario.verListaMecanicos());
+                    String dni = sc.next();
+                    try{
+                        mandarRepararCoche(dni);
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
                 case 9:
                     salir4 = true;
                     break;
@@ -934,34 +1048,11 @@ public class Menu {
                     m.consultaReparaciones(matricula);
                     break;
                 case 2:
-                    System.out.println("Que coche:");
-                    matricula = sc.next();
-                    System.out.println("Que tipo:");
-                    System.out.println("1.-Mecánica.");
-                    System.out.println("2.-Eléctrica.");
-                    System.out.println("3.-Chapa.");
-                    System.out.println("4.-Revision.");
-                    TipoReparacion t = null;
-                    int tipo;
-                    tipo = sc.nextInt();
-                    switch (tipo) {
-                        case 1:
-                            t = TipoReparacion.mecanica;
-                            break;
-                        case 2:
-                            t = TipoReparacion.chapa;
-                            break;
-                        case 3:
-                            t = TipoReparacion.electrica;
-                            break;
-                        case 4:
-                            t = TipoReparacion.revision;
-                            break;
-                        default:
-                            System.out.println("Tipo erróneo");
-                            break;
+                    try{
+                        mandarRepararCoche(dni);
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
                     }
-                    m.repararCoche(t, matricula);
                     break;
                 case 9:
                     salir = true;
@@ -975,7 +1066,7 @@ public class Menu {
 
     private String mostrarCliente(String matricula) {
         Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-        return c.getCliente().toString();
+        return c.getCliente().getInfo();
     }
 
 
