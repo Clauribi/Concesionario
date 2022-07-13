@@ -36,12 +36,4 @@ public class VendedorComision extends Persona {
             throw new ExceptionParametrosInvalidos("El coche no se puede reservar porque el estado es " + coche.getEstado());
         }
     }
-
-    public String getInfo(){
-        return "\nNombre: " + this.getNombre() +
-                "\nDNI: " + this.getDni() +
-                "\nTeléfono: " + this.getTelefono() +
-                "\nDirección: " + this.getDireccion() + "\n";
-    }
-
 }

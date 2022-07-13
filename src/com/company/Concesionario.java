@@ -7,6 +7,11 @@ public class Concesionario {
     private HashMap<String, Coche> listadoCochesTotalesDefinitivo;
     private HashMap<String, VendedorComision> listadoVendedores;
     private HashMap<String, Cliente> listadoClientes;
+    private HashMap<String, Mecanico> listadoMecanicos;
+
+    public HashMap<String, Mecanico> getListadoMecanicos() {
+        return listadoMecanicos;
+    }
 
     public HashMap<Integer, Exposicion> getListadoExposiciones() {
         return listadoExposiciones;
@@ -32,6 +37,16 @@ public class Concesionario {
         this.listadoVendedores = new HashMap<>();
         this.listadoExposiciones.put(expo.getNumExposicion(), expo);
     }
+
+    public void cocheAReparar(String dni, String matricula, TipoReparacion tipo) throws ExceptionParametrosInvalidos {
+        Mecanico m = listadoMecanicos.get(dni);
+        Coche c =listadoCochesTotalesDefinitivo.get(matricula);
+        if (enVenta(matricula)){
+            m.repararCoche(tipo, c);
+            c.setEstado(EstadoCoche.reparando);
+        } else throw new ExceptionParametrosInvalidos("El coche no está en venta, no se puede reparar.");
+    }
+
 
     public String verCochesVenta() {
         ArrayList<String> cochesVenta = new ArrayList<>();
@@ -80,6 +95,9 @@ public class Concesionario {
     public void existeCliente(String dni) throws ExceptionParametrosInvalidos {
         if (!listadoClientes.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe cliente.");
     }
+    public void existeMecanico(String dni) throws ExceptionParametrosInvalidos {
+        if (!listadoMecanicos.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe mecanico.");
+    }
 
     public void existeCoche(String matricula) throws ExceptionParametrosInvalidos {
         if (!listadoCochesTotalesDefinitivo.containsKey(matricula))
@@ -106,6 +124,21 @@ public class Concesionario {
         VendedorComision v = listadoVendedores.get(dni);
         v.updateInfo(nombre, direccion, telefono);
     }
+
+    public ArrayList<VendedorComision> listaVendedores() {
+        Collection<VendedorComision> valores = this.listadoVendedores.values();
+        ArrayList<VendedorComision> listadoTotalVendedores = new ArrayList<>(valores);
+        return listadoTotalVendedores;
+    }
+
+    public String verListaVendedores() {
+        ArrayList<String> verLista = new ArrayList<>();
+        for (VendedorComision v : listadoVendedores.values()) {
+            verLista.add(v.getInfo());
+        }
+        return verLista.toString();
+    }
+
 
     public void addExposicion(int numExpo, String direccion, int telefono) throws ExceptionParametrosInvalidos {
         Exposicion ex1 = new Exposicion(numExpo, direccion, telefono);
@@ -205,9 +238,51 @@ public class Concesionario {
 
     }
 
+    public ArrayList<Cliente> listaClientes() {
+        Collection<Cliente> valores = this.listadoClientes.values();
+        ArrayList<Cliente> listadoTotalClientes = new ArrayList<>(valores);
+        return listadoTotalClientes;
+    }
+
+    public String verListaClientes() {
+        ArrayList<String> verLista = new ArrayList<>();
+        for (Cliente c : listadoClientes.values()) {
+            verLista.add(c.getInfo());
+        }
+        return verLista.toString();
+    }
+
+    public void addMecanico(String dni, String nombre, String direccion, int telefono) throws ExceptionParametrosInvalidos {
+        Mecanico m1 = new Mecanico(nombre, direccion, dni, telefono);
+        listadoMecanicos.put(dni, m1);
+    }
+
+    public void deleteMecanico(String dni) {
+        this.listadoMecanicos.remove(dni);
+    }
+
+    public void changeMecanico(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
+        Mecanico m = listadoMecanicos.get(dni);
+        m.updateInfo(nombre, direccion, telefono);
+
+    }
+    public ArrayList<Mecanico> listaMecanicos() {
+        Collection<Mecanico> valores = this.listadoMecanicos.values();
+        ArrayList<Mecanico> listadoTotalMecanicos = new ArrayList<>(valores);
+        return listadoTotalMecanicos;
+    }
+
+    public String verListaMecanicos() {
+        ArrayList<String> verLista = new ArrayList<>();
+        for (Mecanico m : listadoMecanicos.values()) {
+            verLista.add(m.getInfo());
+        }
+        return verLista.toString();
+    }
+
     public boolean enVenta(String matricula) {
         Coche c = listadoCochesTotalesDefinitivo.get(matricula);
-        if (c.getEstado() == EstadoCoche.enVenta){
+        if (c.getEstado() == EstadoCoche.enVenta) {
             return true;
         }
         return false;

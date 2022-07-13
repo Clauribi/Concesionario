@@ -22,13 +22,21 @@ public class Menu {
         String direccion = sc.next();
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
-        concesionario.addVendedorComision(nombre, direccion, dni, telefono);
+        try {
+            concesionario.addVendedorComision(nombre, direccion, dni, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void bajaVendedorComision() throws ExceptionParametrosInvalidos {
+    private void bajaVendedorComision() {
         System.out.println("DNI:");
         String dni = sc.next();
-        concesionario.existeVendedor(dni);
+        try {
+            concesionario.existeVendedor(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("¿Estas seguro de querer dar de baja a este vendedor?");
         System.out.println("1.-Sí");
         System.out.println("2.-No");
@@ -36,7 +44,11 @@ public class Menu {
         opcion = sc.nextInt();
         switch (opcion) {
             case 1:
-                concesionario.deleteVendedorComision(dni);
+                try {
+                    concesionario.deleteVendedorComision(dni);
+                } catch (ExceptionParametrosInvalidos e) {
+                    System.out.println(e.getMessage());
+                }
                 System.out.println("Se ha dado de baja el vendedor '" + dni + "'.");
                 break;
             case 2:
@@ -48,10 +60,14 @@ public class Menu {
         }
     }
 
-    private void modificarVendedorComision() throws ExceptionParametrosInvalidos {
+    private void modificarVendedorComision() {
         System.out.println("DNI:");
         String dni = sc.next();
-        concesionario.existeVendedor(dni);
+        try {
+            concesionario.existeVendedor(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("Introduzca de nuevo los datos del vendedor con sus modificaciones.");
         System.out.println("Nombre:");
         String nombre = sc.next();
@@ -59,7 +75,11 @@ public class Menu {
         String direccion = sc.next();
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
-        concesionario.changeVendedorComision(nombre, direccion, dni, telefono);
+        try {
+            concesionario.changeVendedorComision(nombre, direccion, dni, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void altaExposicion() throws ExceptionParametrosInvalidos {
@@ -72,13 +92,21 @@ public class Menu {
         String direccion = sc.next();
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
-        concesionario.addExposicion(numExpo, direccion, telefono);
+        try {
+            concesionario.addExposicion(numExpo, direccion, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void bajaExposicion() throws ExceptionParametrosInvalidos {
+    private void bajaExposicion() {
         System.out.println("Número de exposición:");
         Integer numExpo = sc.nextInt();
-        concesionario.existeExposicion(numExpo);
+        try {
+            concesionario.existeExposicion(numExpo);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("¿Estas seguro de querer dar de baja esta exposición?");
         System.out.println("1.-Sí");
         System.out.println("2.-No");
@@ -98,24 +126,36 @@ public class Menu {
         }
     }
 
-    private void modificarExposicion() throws ExceptionParametrosInvalidos {
+    private void modificarExposicion() {
         System.out.println("Número de exposición a modificar:");
         Integer numExpo = sc.nextInt();
-        concesionario.existeExposicion(numExpo);
+        try {
+            concesionario.existeExposicion(numExpo);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("Introduzca de nuevo los datos de la exposición con sus modificaciones.");
         System.out.println("Dirección:");
         String direccion = sc.next();
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
-        concesionario.changeExposicion(numExpo, direccion, telefono);
+        try {
+            concesionario.changeExposicion(numExpo, direccion, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void verDatosExposicion() throws ExceptionParametrosInvalidos {
+    private void verDatosExposicion() {
         System.out.println("Las exposiciones disponibles son las siguientes: ");
         System.out.println(concesionario.verListaExposiciones());
         System.out.println("Indica el número de exposición para ver sus datos: ");
         int numExpo = sc.nextInt();
-        concesionario.existeExposicion(numExpo);
+        try {
+            concesionario.existeExposicion(numExpo);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("Los datos de la exposición son: ");
         System.out.println(concesionario.verExpo(numExpo) + "\n" + concesionario.verCochesExpo(numExpo));
     }
@@ -123,14 +163,18 @@ public class Menu {
     public void cambiarCocheExposicion(String matricula, int numExpo) {
         Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
         Exposicion exposicion = concesionario.getListadoExposiciones().get(numExpo);
-        try {
-            c.cambiarExposicion(exposicion);
-        }catch (ExceptionParametrosInvalidos e){
-            System.out.println(e.getMessage());
+        if (c.getExposicion().getNumExposicion() == numExpo) {
+            System.out.println("El cambio no se va a realizar porque el coche ya estaba en esa exposición");
+        } else {
+            try {
+                c.cambiarExposicion(exposicion);
+            } catch (ExceptionParametrosInvalidos e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    private void menuCambiarCocheExposicion() throws ExceptionParametrosInvalidos {
+    private void menuCambiarCocheExposicion() {
         Coche c = null;
         String matricula = null;
         int numExpo = 0;
@@ -140,6 +184,11 @@ public class Menu {
             System.out.println("Indica la matrícula del coche a cambiar: ");
             System.out.println(concesionario.verCochesVenta());
             matricula = sc.next();
+            try {
+                concesionario.existeCoche(matricula);
+            } catch (ExceptionParametrosInvalidos e) {
+                System.out.println(e.getMessage());
+            }
             if (!concesionario.enVenta(matricula)) {
                 System.out.println("La matrícula no está en la lista. Indica una matrícula correcta o escribe 'salir' para cancelar.");
                 matricula = sc.next();
@@ -149,20 +198,13 @@ public class Menu {
             }
             noVenta = true;
         }
-        if (c == null) existe = true;
-        while (!existe) {
-            System.out.println("Indica la exposición de destino:");
-            System.out.println(concesionario.verListaExposiciones());
-            numExpo = sc.nextInt();
+        System.out.println("Indica la exposición de destino:");
+        System.out.println(concesionario.verListaExposiciones());
+        numExpo = sc.nextInt();
+        try {
             concesionario.existeExposicion(numExpo);
-            if (c.getExposicion().getNumExposicion() == numExpo) {
-                System.out.println("El cambio no se va a realizar porque el coche ya estaba en esa exposición");
-            } else {
-                Exposicion exposicion = concesionario.getListadoExposiciones().get(numExpo);
-                System.out.println("Se ha realizado el cambio del coche con matrícula " + c.getMatricula() + " a la siguiente exposición:\n"
-                        + exposicion.getInfo());
-            }
-            existe = true;
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
         }
         cambiarCocheExposicion(matricula, numExpo);
     }
@@ -170,6 +212,9 @@ public class Menu {
     private void altaCoche() throws ExceptionParametrosInvalidos {
         System.out.println("Matricula:");
         String matricula = sc.next();
+        if (concesionario.getListadoCochesTotalesDefinitivo().containsKey(matricula)) {
+            throw new ExceptionParametrosInvalidos("Ya existe esta matricula.");
+        }
         System.out.println("Marca:");
         String marca = sc.next();
         System.out.println("Modelo:");
@@ -204,13 +249,21 @@ public class Menu {
         if (!concesionario.getListadoExposiciones().containsKey(expo))
             throw new ExceptionParametrosInvalidos("No existe la exposición");
         Exposicion exposicion = concesionario.getListadoExposiciones().get(expo);
-        concesionario.addCoche(marca, modelo, matricula, compra, venta, t, exposicion);
+        try {
+            concesionario.addCoche(marca, modelo, matricula, compra, venta, t, exposicion);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void bajaCoche() throws ExceptionParametrosInvalidos {
+    private void bajaCoche() {
         System.out.println("Matrícula:");
         String matricula = sc.next();
-        concesionario.existeCoche(matricula);
+        try {
+            concesionario.existeCoche(matricula);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("¿Estas seguro de querer dar de baja a este coche?");
         System.out.println("1.-Sí");
         System.out.println("2.-No");
@@ -218,7 +271,11 @@ public class Menu {
         opcion = sc.nextInt();
         switch (opcion) {
             case 1:
-                concesionario.deleteCoche(matricula);
+                try {
+                    concesionario.deleteCoche(matricula);
+                } catch (ExceptionParametrosInvalidos e) {
+                    System.out.println(e.getMessage());
+                }
                 System.out.println("Se ha dado de baja el coche '" + matricula + "'.");
                 break;
             case 2:
@@ -230,10 +287,14 @@ public class Menu {
         }
     }
 
-    private void modificarCoche() throws ExceptionParametrosInvalidos {
+    private void modificarCoche() {
         System.out.println("Matrícula:");
         String matricula = sc.next();
-        concesionario.existeCoche(matricula);
+        try {
+            concesionario.existeCoche(matricula);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("Introduzca de nuevo los datos del coche con sus modificaciones.");
         System.out.println("Marca:");
         String marca = sc.next();
@@ -266,9 +327,17 @@ public class Menu {
         }
         System.out.println("Nº exposición: ");
         int expo = sc.nextInt();
-        concesionario.existeExposicion(expo);
+        try {
+            concesionario.existeExposicion(expo);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         Exposicion exposicion = concesionario.getListadoExposiciones().get(expo);
-        concesionario.changeCoche(marca, modelo, matricula, compra, venta, t, exposicion);
+        try {
+            concesionario.changeCoche(marca, modelo, matricula, compra, venta, t, exposicion);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private String verCochesConcesionario() {
@@ -290,13 +359,21 @@ public class Menu {
         String direccion = sc.next();
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
-        concesionario.addCliente(dni, nombre, direccion, telefono);
+        try {
+            concesionario.addCliente(dni, nombre, direccion, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void bajaCliente() throws ExceptionParametrosInvalidos {
+    private void bajaCliente() {
         System.out.println("DNI:");
         String dni = sc.next();
-        concesionario.existeCliente(dni);
+        try {
+            concesionario.existeCliente(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("¿Estas seguro de querer dar de baja a este cliente?");
         System.out.println("1.-Sí");
         System.out.println("2.-No");
@@ -304,7 +381,11 @@ public class Menu {
         opcion = sc.nextInt();
         switch (opcion) {
             case 1:
-                concesionario.deleteCliente(dni);
+                try {
+                    concesionario.deleteCliente(dni);
+                } catch (ExceptionParametrosInvalidos e) {
+                    System.out.println(e.getMessage());
+                }
                 System.out.println("Se ha dado de baja el cliente '" + dni + "'.");
                 break;
             case 2:
@@ -316,10 +397,14 @@ public class Menu {
         }
     }
 
-    private void modificarCliente() throws ExceptionParametrosInvalidos {
+    private void modificarCliente() {
         System.out.println("DNI:");
         String dni = sc.next();
-        concesionario.existeCliente(dni);
+        try {
+            concesionario.existeCliente(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("Introduzca de nuevo los datos del cliente con sus modificaciones.");
         System.out.println("Nombre:");
         String nombre = sc.next();
@@ -327,7 +412,78 @@ public class Menu {
         String direccion = sc.next();
         System.out.println("Teléfono:");
         int telefono = sc.nextInt();
-        concesionario.changeCliente(nombre, direccion, dni, telefono);
+        try {
+            concesionario.changeCliente(nombre, direccion, dni, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void altaMecanico() throws ExceptionParametrosInvalidos {
+        System.out.println("DNI:");
+        String dni = sc.next();
+        if (concesionario.getListadoMecanicos().containsKey(dni))
+            throw new ExceptionParametrosInvalidos("Ya hay un mecanico con ese DNI.");
+        System.out.println("Nombre:");
+        String nombre = sc.next();
+        System.out.println("Dirección:");
+        String direccion = sc.next();
+        System.out.println("Teléfono:");
+        int telefono = sc.nextInt();
+        try {
+            concesionario.addMecanico(dni, nombre, direccion, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void bajaMecanico() {
+        System.out.println("DNI:");
+        String dni = sc.next();
+        try {
+            concesionario.existeMecanico(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("¿Estas seguro de querer dar de baja a este mecanico?");
+        System.out.println("1.-Sí");
+        System.out.println("2.-No");
+        int opcion;
+        opcion = sc.nextInt();
+        switch (opcion) {
+            case 1:
+                concesionario.deleteMecanico(dni);
+                System.out.println("Se ha dado de baja el cliente '" + dni + "'.");
+                break;
+            case 2:
+                System.out.println("No se da de baja.");
+                break;
+            default:
+                System.out.println("Opción incorrecta.");
+                break;
+        }
+    }
+
+    private void modificarMecanico() {
+        System.out.println("DNI:");
+        String dni = sc.next();
+        try {
+            concesionario.existeMecanico(dni);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Introduzca de nuevo los datos del mecanico con sus modificaciones.");
+        System.out.println("Nombre:");
+        String nombre = sc.next();
+        System.out.println("Dirección:");
+        String direccion = sc.next();
+        System.out.println("Teléfono:");
+        int telefono = sc.nextInt();
+        try {
+            concesionario.changeMecanico(nombre, direccion, dni, telefono);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 
@@ -350,7 +506,7 @@ public class Menu {
                 case 2:
                     try {
                         gestionVendedoresComision();
-                    }catch (ExceptionParametrosInvalidos e){
+                    } catch (ExceptionParametrosInvalidos e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -417,7 +573,7 @@ public class Menu {
                 case 5:
                     try {
                         consultas(sc);
-                    }catch (ExceptionParametrosInvalidos e){
+                    } catch (ExceptionParametrosInvalidos e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -494,26 +650,26 @@ public class Menu {
                 case 1:
                     try {
                         altaCliente();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 2:
                     try {
                         bajaCliente();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
                     try {
                         modificarCliente();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 4:
-//                    getListadoClientes();
+                    System.out.println(concesionario.verListaClientes());
                     break;
                 case 9:
                     salir4 = true;
@@ -545,19 +701,19 @@ public class Menu {
                 case 2:
                     try {
                         bajaVendedorComision();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
                     try {
                         modificarVendedorComision();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 4:
-//                    System.out.println(getDatosVendedores());
+                    System.out.println(concesionario.verListaVendedores());
                     break;
                 case 9:
                     salir3 = true;
@@ -585,28 +741,28 @@ public class Menu {
                 case 1:
                     try {
                         altaExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 2:
                     try {
                         bajaExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
                     try {
                         modificarExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 4:
                     try {
                         verDatosExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -618,7 +774,7 @@ public class Menu {
                 case 6:
                     try {
                         menuCambiarCocheExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -646,21 +802,21 @@ public class Menu {
                 case 1:
                     try {
                         altaCoche();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 2:
                     try {
                         bajaCoche();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
                     try {
                         modificarCoche();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -741,7 +897,7 @@ public class Menu {
                 case 5:
                     try {
                         verDatosExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -817,7 +973,7 @@ public class Menu {
         }
     }
 
-    private String mostrarCliente(String matricula){
+    private String mostrarCliente(String matricula) {
         Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
         return c.getCliente().toString();
     }
@@ -828,11 +984,6 @@ public class Menu {
 //        ArrayList<Coche> listadoTotalCoches = new ArrayList<>(valores);
 //        return listadoTotalCoches;
 //    }
-
-
-
-
-
 
 
 //    private ArrayList getListadoExposiciones() {

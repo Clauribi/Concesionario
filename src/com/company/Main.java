@@ -3,13 +3,13 @@ package com.company;
 public class Main {
 
     public static void main(String[] args) {
-        Concesionario c1 = null;
+        Menu menu = null;
         try {
-            c1 = new Concesionario();
+            menu = new Menu();
         } catch (ExceptionParametrosInvalidos e){
             System.out.println(e.getMessage());
         }
-            c1.menu();
+            menu.menu();
     }
 }
 

@@ -25,4 +25,5 @@ public class Cliente extends Persona {
     public void agregarCocheReservado(Coche coche) {
         this.reservados.put(coche.getMatricula(), coche);
     }
+
 }
