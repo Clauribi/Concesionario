@@ -51,6 +51,19 @@ public class Concesionario {
         } else throw new ExceptionParametrosInvalidos("El coche no está en venta, no se puede reparar.");
     }
 
+    public void cocheReparado (String matricula) {
+        Coche c = listadoCochesTotalesDefinitivo.get(matricula);
+        for (Reparacion r : c.getReparaciones()){
+            if (!r.isResuelta()){
+                try{
+                r.resolver();
+            }catch (ExceptionParametrosInvalidos e){
+                    e.getMessage();
+                }
+            }
+        }
+    }
+
 
     public String verCochesVenta() {
         ArrayList<String> cochesVenta = new ArrayList<>();

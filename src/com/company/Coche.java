@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Coche {
@@ -12,7 +13,7 @@ public class Coche {
     private EstadoCoche estado;
     private Exposicion exposicion;
     private Cliente cliente;
-    private HashMap<String, Reparacion> reparaciones;
+    private ArrayList<Reparacion> reparaciones;
 
     public void setMarca(String marca) throws ExceptionParametrosInvalidos {
         if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
@@ -75,7 +76,7 @@ public class Coche {
         return matricula;
     }
 
-    public HashMap<String, Reparacion> getReparaciones() {
+    public ArrayList<Reparacion> getReparaciones() {
         return reparaciones;
     }
 
@@ -95,13 +96,13 @@ public class Coche {
         setExposicion(expo);
     }
 
-    public void consultaReparaciones(String matricula) throws ExceptionParametrosInvalidos {
-        if (this.reparaciones.containsKey(matricula)) {
-            this.reparaciones.get(matricula);
-        } else {
-            throw new ExceptionParametrosInvalidos("La matricula no existe o no tiene reparaciones.");
-        }
-    }
+//    public void consultaReparaciones(String matricula) throws ExceptionParametrosInvalidos {
+//        if (this.reparaciones.containsKey(matricula)) {
+//            this.reparaciones.get(matricula);
+//        } else {
+//            throw new ExceptionParametrosInvalidos("La matricula no existe o no tiene reparaciones.");
+//        }
+//    }
 
     public void updateInfo(String marca, String modelo, double precioCompra, double precioVenta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
         setMarca(marca);

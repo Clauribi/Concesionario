@@ -17,10 +17,12 @@ public class VendedorComision extends Persona {
         if (coche.getEstado() == EstadoCoche.enVenta) {
             coche.setEstado(EstadoCoche.vendido);
             cochesVendidos.put(coche.getMatricula(), cliente);
+            cliente.agregarCocheComprado(coche);
         }else if (coche.getEstado() == EstadoCoche.reservado){
             if (coche.getCliente() == cliente) {
                 coche.setEstado(EstadoCoche.vendido);
                 cochesVendidos.put(coche.getMatricula(), cliente);
+                cliente.agregarCocheComprado(coche);
             } else {
                 throw new ExceptionParametrosInvalidos("El coche con matricula " + coche.getMatricula() + " está reservado por " + coche.getCliente());
             }
@@ -32,8 +34,17 @@ public class VendedorComision extends Persona {
     public void reservarCoche(Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
         if (coche.getEstado() == EstadoCoche.enVenta){
             coche.setEstado(EstadoCoche.reservado);
+            cliente.agregarCocheReservado(coche);
         } else {
             throw new ExceptionParametrosInvalidos("El coche no se puede reservar porque el estado es " + coche.getEstado());
+        }
+    }
+
+    public void cancelarReserva (Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
+        if (coche.getEstado() == EstadoCoche.reservado){
+            coche.setEstado(EstadoCoche.enVenta);
+        } else {
+            throw new ExceptionParametrosInvalidos("No se puede cancelar la reserva del coche porque el estado es: " + coche.getEstado());
         }
     }
 }
