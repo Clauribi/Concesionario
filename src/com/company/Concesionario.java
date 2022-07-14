@@ -49,7 +49,8 @@ public class Concesionario {
         Mecanico m = listadoMecanicos.get(dni);
         Coche c =listadoCochesTotalesDefinitivo.get(matricula);
         if (enVenta(matricula)){
-            m.repararCoche(tipo, c);
+            Reparacion r = new Reparacion(tipo, c);
+            c.getReparaciones().add(r);
         } else throw new ExceptionParametrosInvalidos("El coche no está en venta, no se puede reparar.");
     }
 
@@ -58,14 +59,13 @@ public class Concesionario {
         for (Reparacion r : c.getReparaciones()){
             if (!r.isResuelta()){
                 try{
-                r.resolver();
+                r.resolver(c);
             }catch (ExceptionParametrosInvalidos e){
                     e.getMessage();
                 }
             }
         }
     }
-
 
     public String verCochesVenta() {
         ArrayList<String> cochesVenta = new ArrayList<>();

@@ -31,8 +31,8 @@ public class Reparacion implements Comparable<Reparacion> {
         return resuelta;
     }
 
-    public void resolver() throws ExceptionParametrosInvalidos {
-        this.coche.setEstado(EstadoCoche.enVenta);
+    public void resolver(Coche coche) throws ExceptionParametrosInvalidos {
+        coche.setEstado(EstadoCoche.enVenta);
         this.resuelta = true;
     }
 

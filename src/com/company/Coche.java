@@ -89,6 +89,7 @@ public class Coche {
         setTipo(tipo);
         setExposicion(exposicion);
         this.estado = EstadoCoche.enVenta;
+        this.reparaciones = new ArrayList<>();
     }
 
     public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {
