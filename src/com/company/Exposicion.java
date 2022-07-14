@@ -13,6 +13,14 @@ public class Exposicion {
         return numExposicion;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public int getTelefono() {
+        return telefono;
+    }
+
     public void setNumExposicion(int numExposicion) throws ExceptionParametrosInvalidos {
         if (numExposicion == 0) throw new ExceptionParametrosInvalidos("El número de la exposición no puede ser 0.");
         this.numExposicion = numExposicion;
@@ -28,7 +36,6 @@ public class Exposicion {
             throw new ExceptionParametrosInvalidos("El teléfono tiene que tener 9 dígitos.");
         this.telefono = telefono;
     }
-
 
     public void setCochesExpo(HashMap<String, Coche> cochesExpo) {
         this.cochesExpo = cochesExpo;
