@@ -8,8 +8,10 @@ import java.util.Scanner;
 public class Menu {
     private Scanner sc = new Scanner(System.in);
     private Concesionario concesionario = new Concesionario();
+    private DirectorComercial d1;
 
     public Menu() throws ExceptionParametrosInvalidos {
+        this.d1=null;
     }
 
     private String consultarReservas() {
@@ -560,7 +562,7 @@ public class Menu {
         } else {
             for (Reparacion r : c.getReparaciones()) {
                 if (r.isResuelta() == true) {
-                    r.getInfo();
+                    System.out.println(r.getInfo());
                 }
             }
         }
@@ -568,7 +570,7 @@ public class Menu {
 
 
     public void menu() {
-        DirectorComercial d1 = null;
+
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
         int opcion;
@@ -698,7 +700,7 @@ public class Menu {
                     concesionario.existeVendedor(dni);
                     VendedorComision v1 = concesionario.getListadoVendedores().get(dni);
                     System.out.println("El listado de coches vendidos por " + v1.getNombre() + " es:");
-                    v1.getCochesVendidos().values().toString();
+                    System.out.println(v1.getCochesVendidos().values().toString());
                     int sueldo = v1.getCochesVendidos().size() * 200;
                     System.out.println("El sueldo es: " + sueldo);
                     break;
@@ -887,8 +889,7 @@ public class Menu {
             System.out.println("2.-Dar de baja una exposición.");
             System.out.println("3.-Modificar una exposición.");
             System.out.println("4.-Visualizar datos de una exposición.");
-//            System.out.println("5.-Visualizar los coches de una exposición.");
-            System.out.println("6.-Cambiar coche de exposición.");
+            System.out.println("5.-Cambiar coche de exposición.");
             System.out.println("9.-Volver.");
             int option = sc.nextInt();
             switch (option) {
@@ -920,12 +921,7 @@ public class Menu {
                         System.out.println(e.getMessage());
                     }
                     break;
-//                case 5:
-//                    System.out.println("Indica la exposición:");
-//                    expo = sc.nextInt();
-//                    System.out.println(getDatosCochesExpo(expo));
-//                    break;
-                case 6:
+                case 5:
                     try {
                         menuCambiarCocheExposicion();
                     } catch (Exception e) {
@@ -1000,9 +996,10 @@ public class Menu {
             System.out.println("Indica la acción a realizar:");
             System.out.println("1.-Vender un coche.");
             System.out.println("2.-Reservar un coche.");
-            System.out.println("3.-Consultar clientes.");
+            System.out.println("3.-Cancelar reserva de un coche.");
             System.out.println("4.-Consultar coches.");
-            System.out.println("5.-Consultar exposiciones.");
+            System.out.println("5.-Consultar exposiciciones.");
+            System.out.println("6.-Consultar clientes.");
             System.out.println("9.-Volver.");
             opcion = sc.nextInt();
             switch (opcion) {
@@ -1033,7 +1030,7 @@ public class Menu {
                     coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
                     System.out.println("Indica el DNI del cliente:");
                     dni = sc.next();
-                    concesionario.existeVendedor(dni);
+                    concesionario.existeCliente(dni);
                     cliente = concesionario.getListadoClientes().get(dni);
                     try {
                         v1.reservarCoche(coche, cliente);
@@ -1043,7 +1040,18 @@ public class Menu {
                     }
                     break;
                 case 3:
-
+                    System.out.println("Indica el DNI del cliente:");
+                    dni = sc.next();
+                    concesionario.existeCliente(dni);
+                    cliente = concesionario.getListadoClientes().get(dni);
+                    if (cliente.getReservados().isEmpty())
+                        throw new ExceptionParametrosInvalidos("El cliente no tiene ningun coche reservado.");
+                    System.out.println("Indica la matricula del coche a cancelar.");
+                    matricula = sc.next();
+                    coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
+                    if (cliente.getReservados().contains(coche)) {
+                        v1.cancelarReserva(coche, cliente);
+                    } else System.out.println("Este coche no está reservado por este cliente.");
                     break;
                 case 4:
                     System.out.println(verCochesConcesionario());
@@ -1054,6 +1062,9 @@ public class Menu {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
+                    break;
+                case 6:
+                    System.out.println(concesionario.verListaClientes());
                     break;
                 case 9:
                     salir = true;

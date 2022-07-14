@@ -18,11 +18,13 @@ public class VendedorComision extends Persona {
             coche.setEstado(EstadoCoche.vendido);
             cochesVendidos.put(coche.getMatricula(), cliente);
             cliente.agregarCocheComprado(coche);
+            coche.setCliente(cliente);
         }else if (coche.getEstado() == EstadoCoche.reservado){
             if (coche.getCliente() == cliente) {
                 coche.setEstado(EstadoCoche.vendido);
                 cochesVendidos.put(coche.getMatricula(), cliente);
                 cliente.agregarCocheComprado(coche);
+                coche.setCliente(cliente);
             } else {
                 throw new ExceptionParametrosInvalidos("El coche con matricula " + coche.getMatricula() + " está reservado por " + coche.getCliente());
             }

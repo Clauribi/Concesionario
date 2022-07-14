@@ -34,8 +34,10 @@ public class Concesionario {
         this.listadoExposiciones = new HashMap<>();
         this.listadoCochesTotalesDefinitivo = new HashMap<>();
         this.listadoClientes = new HashMap<>();
+        this.listadoMecanicos = new HashMap<>();
         this.listadoVendedores = new HashMap<>();
         this.listadoExposiciones.put(expo.getNumExposicion(), expo);
+
     }
 
     public ArrayList<Coche> cochesReservadosCliente(String dni){
