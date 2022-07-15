@@ -40,8 +40,8 @@ public class Concesionario {
     }
 
     public ArrayList<Coche> cochesReservadosCliente(String dni) {
-        Cliente c = listadoClientes.get(dni);
-        return c.getReservados();
+        Cliente cliente = listadoClientes.get(dni);
+        return cliente.getReservados();
     }
 
     public void cocheAReparar(String matricula, TipoReparacion tipo) throws ExceptionParametrosInvalidos {
@@ -58,9 +58,9 @@ public class Concesionario {
             if (!r.isResuelta()) {
                 try {
                     r.resolver(coche);
+                    System.out.println("RESUELTA*************");
                 } catch (ExceptionParametrosInvalidos e) {
-                    e.printStackTrace();
-                }
+                    System.out.println(e.getMessage());                }
             }
         }
     }
@@ -180,6 +180,11 @@ public class Concesionario {
         m.updateInfo(nombre, direccion, telefono);
     }
 
+    public String mostrarCliente(String matricula) {
+        Coche coche = listadoCochesTotalesDefinitivo.get(matricula);
+        return coche.getCliente().getInfo();
+    }
+
     public String verListaClientes() {
         ArrayList<String> verLista = new ArrayList<>();
         for (Cliente c : listadoClientes.values()) {
@@ -273,6 +278,12 @@ public class Concesionario {
         return totalCoches.toString();
     }
 
+    public void reservasCliente(Cliente cliente){
+        for (Coche coche : cliente.getReservados()){
+            coche.getInfo();
+        }
+    }
+
     public ArrayList<VendedorComision> listaVendedores() {
         Collection<VendedorComision> valores = this.listadoVendedores.values();
         ArrayList<VendedorComision> listadoTotalVendedores = new ArrayList<>(valores);
@@ -291,10 +302,44 @@ public class Concesionario {
         return listadoTotalClientes;
     }
 
-    public ArrayList<Coche> listaCoches() {
-        Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
-        ArrayList<Coche> listadoTotalCoches = new ArrayList<>(valores);
-        return listadoTotalCoches;
+    public ArrayList<Coche> listaCochesReservados() {
+        ArrayList<Coche> cochesReservados = new ArrayList<>();
+        for (Coche coche : listadoCochesTotalesDefinitivo.values()) {
+            if (coche.getEstado() == EstadoCoche.reservado) {
+                cochesReservados.add(coche);
+            }
+        }
+        return cochesReservados;
+    }
+
+    public ArrayList<Coche> listaCochesStock() {
+        ArrayList<Coche> cochesStock = new ArrayList<>();
+        for (Coche coche : listadoCochesTotalesDefinitivo.values()) {
+            if (coche.getEstado() == EstadoCoche.enVenta) {
+                cochesStock.add(coche);
+            }
+        }
+        return cochesStock;
+    }
+
+    public ArrayList<Coche> listaCochesReparacion() {
+        ArrayList<Coche> cochesReparacion = new ArrayList<>();
+        for (Coche coche : listadoCochesTotalesDefinitivo.values()) {
+            if (coche.getEstado() == EstadoCoche.reparando) {
+                cochesReparacion.add(coche);
+            }
+        }
+        return cochesReparacion;
+    }
+
+    public ArrayList<Coche> listaCochesVendidos() {
+        ArrayList<Coche> cochesVendidos = new ArrayList<>();
+        for (Coche coche : listadoCochesTotalesDefinitivo.values()) {
+            if (coche.getEstado() == EstadoCoche.vendido) {
+                cochesVendidos.add(coche);
+            }
+        }
+        return cochesVendidos;
     }
 
     public ArrayList<Exposicion> listaExposiciones() {

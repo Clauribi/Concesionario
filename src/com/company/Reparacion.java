@@ -18,7 +18,6 @@ public class Reparacion implements Comparable<Reparacion> {
         this.coche.setEstado(EstadoCoche.reparando);
         this.resuelta = false;
         this.fechaDeCreacion = LocalDateTime.now();
-
     }
 
     public LocalDateTime getFechaDeCreacion() {
@@ -36,11 +35,11 @@ public class Reparacion implements Comparable<Reparacion> {
 
     public String getInfo() {
         return "Tipo de reparación: " + tipo +
-                "Fecha: " + this.fechaDeCreacion;
+                "\nFecha: " + this.fechaDeCreacion;
     }
 
     @Override
     public int compareTo(Reparacion o) {
-        return o.getFechaDeCreacion().compareTo(this.fechaDeCreacion) * (-1);
+        return o.getFechaDeCreacion().compareTo(this.fechaDeCreacion) * 1;
     }
 }

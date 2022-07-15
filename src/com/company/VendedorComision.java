@@ -3,9 +3,9 @@ package com.company;
 import java.util.HashMap;
 
 public class VendedorComision extends Persona {
-    private HashMap<String, Cliente> cochesVendidos = new HashMap<>();
+    private HashMap<String, Coche> cochesVendidos = new HashMap<>();
 
-    public HashMap<String, Cliente> getCochesVendidos() {
+    public HashMap<String, Coche> getCochesVendidos() {
         return cochesVendidos;
     }
 
@@ -16,13 +16,13 @@ public class VendedorComision extends Persona {
     public void venderCoche(Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
         if (coche.getEstado() == EstadoCoche.enVenta) {
             coche.setEstado(EstadoCoche.vendido);
-            cochesVendidos.put(coche.getMatricula(), cliente);
+            cochesVendidos.put(coche.getMatricula(), coche);
             cliente.agregarCocheComprado(coche);
             coche.setCliente(cliente);
         }else if (coche.getEstado() == EstadoCoche.reservado){
             if (coche.getCliente() == cliente) {
                 coche.setEstado(EstadoCoche.vendido);
-                cochesVendidos.put(coche.getMatricula(), cliente);
+                cochesVendidos.put(coche.getMatricula(), coche);
                 cliente.agregarCocheComprado(coche);
                 coche.setCliente(cliente);
             } else {
@@ -37,12 +37,13 @@ public class VendedorComision extends Persona {
         if (coche.getEstado() == EstadoCoche.enVenta){
             coche.setEstado(EstadoCoche.reservado);
             cliente.agregarCocheReservado(coche);
+            coche.setCliente(cliente);
         } else {
             throw new ExceptionParametrosInvalidos("El coche no se puede reservar porque el estado es " + coche.getEstado());
         }
     }
 
-    public void cancelarReserva (Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
+    public void cancelarReserva (Coche coche) throws ExceptionParametrosInvalidos {
         if (coche.getEstado() == EstadoCoche.reservado){
             coche.setEstado(EstadoCoche.enVenta);
         } else {
