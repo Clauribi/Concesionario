@@ -17,16 +17,19 @@ public class Coche {
 
     public void setMarca(String marca) throws ExceptionParametrosInvalidos {
         if (marca == null) throw new ExceptionParametrosInvalidos("La marca no puede ser null.");
+        if (marca.isEmpty()) throw new ExceptionParametrosInvalidos("La marca no puede estar vacía.");
         this.marca = marca;
     }
 
     public void setModelo(String modelo) throws ExceptionParametrosInvalidos {
         if (modelo == null) throw new ExceptionParametrosInvalidos("El modelo no puede ser null.");
+        if (modelo.isEmpty()) throw new ExceptionParametrosInvalidos("El modelo no puede estar vacía.");
         this.modelo = modelo;
     }
 
     public void setMatricula(String matricula) throws ExceptionParametrosInvalidos {
         if (matricula == null) throw new ExceptionParametrosInvalidos("La matrícula no puede ser null.");
+        if (matricula.isEmpty()) throw new ExceptionParametrosInvalidos("La matrícula no puede estar vacía.");
         this.matricula = matricula;
     }
 
@@ -90,6 +93,7 @@ public class Coche {
         setExposicion(exposicion);
         this.estado = EstadoCoche.enVenta;
         this.reparaciones = new ArrayList<>();
+
     }
 
     public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {

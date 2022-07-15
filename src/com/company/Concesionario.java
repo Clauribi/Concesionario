@@ -35,6 +35,8 @@ public class Concesionario {
         this.listadoClientes = new HashMap<>();
         this.listadoMecanicos = new HashMap<>();
         this.listadoVendedores = new HashMap<>();
+        Exposicion exposicion = new Exposicion(1, "Calle Alvarado 2", 678345629);
+        this.listadoExposiciones.put(1, exposicion);
     }
 
     public ArrayList<Coche> cochesReservadosCliente(String dni) {

@@ -28,6 +28,7 @@ public class Exposicion {
 
     public void setDireccion(String direccion) throws ExceptionParametrosInvalidos {
         if (direccion == null) throw new ExceptionParametrosInvalidos("La dirección no puede ser null.");
+        if (direccion.isEmpty()) throw new ExceptionParametrosInvalidos("La dirección no puede estar vacía.");
         this.direccion = direccion;
     }
 

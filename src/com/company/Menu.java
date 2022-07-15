@@ -7,6 +7,9 @@ import java.util.Scanner;
 
 public class Menu {
     private Scanner sc = new Scanner(System.in);
+    //    private Scanner useDelimiter(String pattern) {
+//        return sc.useDelimiter("\n");
+//    }
     private Concesionario concesionario = new Concesionario();
     private DirectorComercial d1;
 
@@ -14,7 +17,84 @@ public class Menu {
         this.d1 = null;
     }
 
+    private void venderCoche(String dniVendedor) {
+        VendedorComision vendedor = concesionario.getListadoVendedores().get(dniVendedor);
+        System.out.println("Indica la matricula del coche que quieres vender.");
+        System.out.println("Listado de coches en Stock:");
+        System.out.println(concesionario.verCochesVenta());
+        System.out.println("Listado de coches reservados:");
+        System.out.println(concesionario.verCochesReservados());
+        String matricula = sc.next();
+        Coche coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
+        System.out.println("Indica el DNI del cliente:");
+        String dni = sc.next();
+        Cliente cliente = concesionario.getListadoClientes().get(dni);
+        try {
+            vendedor.venderCoche(coche, cliente);
+            cliente.agregarCocheComprado(coche);
+            coche.setCliente(cliente);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void reservarCoche(String dniVendedor) {
+        VendedorComision vendedor = concesionario.getListadoVendedores().get(dniVendedor);
+        Coche coche = null;
+        System.out.println("Indica la matricula del coche que quieres reservar.");
+        System.out.println("Listado de coches en Stock:");
+        System.out.println(concesionario.verCochesVenta());
+        String matricula = sc.next();
+        try {
+            concesionario.existeCoche(matricula);
+            coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+        if (coche != null) {
+            System.out.println("Indica el DNI del cliente:");
+            String dni = sc.next();
+            try {
+                concesionario.existeCliente(dni);
+                Cliente cliente = concesionario.getListadoClientes().get(dni);
+                vendedor.reservarCoche(coche, cliente);
+                cliente.agregarCocheReservado(coche);
+            } catch (ExceptionParametrosInvalidos e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void cancelarReserva(String dniVendedor) throws ExceptionParametrosInvalidos {
+        VendedorComision vendedor = concesionario.getListadoVendedores().get(dniVendedor);
+        Cliente cliente = null;
+        Coche coche = null;
+        System.out.println("Indica el DNI del cliente:");
+        String dni = sc.next();
+        try {
+            concesionario.existeCliente(dni);
+            cliente = concesionario.getListadoClientes().get(dni);
+
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+        if (cliente.getReservados().isEmpty())
+            throw new ExceptionParametrosInvalidos("El cliente no tiene ningun coche reservado.");
+        System.out.println("Indica la matricula del coche a cancelar.");
+        String matricula = sc.next();
+        try {
+            concesionario.existeCoche(matricula);
+            coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
+            if (cliente.getReservados().contains(coche)) {
+                vendedor.cancelarReserva(coche, cliente);
+            } else System.out.println("Este coche no está reservado por este cliente.");
+        } catch (ExceptionParametrosInvalidos e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private String consultarReservas() {
+        sc.useDelimiter("\n");
         boolean repetir = false;
         System.out.println("Indica el DNI del cliente a consultar:");
         System.out.println(concesionario.verListaClientes());
@@ -36,6 +116,7 @@ public class Menu {
     }
 
     private void altaVendedorComision() throws ExceptionParametrosInvalidos {
+        sc.useDelimiter("\n");
         System.out.println("Indica los siguientes datos para dar de alta un vendedor:");
         System.out.println("DNI:");
         String dni = sc.next();
@@ -56,6 +137,7 @@ public class Menu {
     }
 
     private void bajaVendedorComision() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoVendedores().isEmpty()) {
             System.out.println("No existen vendedores.");
         } else {
@@ -103,6 +185,7 @@ public class Menu {
     }
 
     private void modificarVendedorComision() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoVendedores().isEmpty()) {
             System.out.println("No existen vendedores.");
         } else {
@@ -147,6 +230,7 @@ public class Menu {
     }
 
     private void altaExposicion() throws ExceptionParametrosInvalidos {
+        sc.useDelimiter("\n");
         System.out.println("Introduzca los siguientes datos para dar de alta una exposición:");
         System.out.println("Nº exposición:");
         int numExpo = sc.nextInt();
@@ -166,6 +250,7 @@ public class Menu {
     }
 
     private void bajaExposicion() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoExposiciones().isEmpty()) {
             System.out.println("No existen exposiciones.");
         } else {
@@ -210,6 +295,7 @@ public class Menu {
     }
 
     private void modificarExposicion() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoExposiciones().isEmpty()) {
             System.out.println("No existen exposiciones.");
         } else {
@@ -252,6 +338,7 @@ public class Menu {
     }
 
     private void verDatosExposicion() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoExposiciones().isEmpty()) {
             System.out.println("No existen exposiciones.");
         } else {
@@ -278,6 +365,7 @@ public class Menu {
     }
 
     public void cambiarCocheExposicion(String matricula, int numExpo) {
+        sc.useDelimiter("\n");
         Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
         Exposicion exposicion = concesionario.getListadoExposiciones().get(numExpo);
         if (c.getExposicion().getNumExposicion() == numExpo) {
@@ -293,6 +381,7 @@ public class Menu {
     }
 
     private void menuCambiarCocheExposicion() {
+        sc.useDelimiter("\n");
         String matricula = null;
         int numExpo = 0;
         boolean repetir = false;
@@ -333,6 +422,7 @@ public class Menu {
     }
 
     private void altaCoche() throws ExceptionParametrosInvalidos {
+        sc.useDelimiter("\n");
         System.out.println("Introduzca los siguientes datos para dar de alta un coche.");
         System.out.println("Matricula:");
         String matricula = sc.next();
@@ -381,6 +471,7 @@ public class Menu {
     }
 
     private void bajaCoche() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoCochesTotalesDefinitivo().isEmpty()) {
             System.out.println("No existen coches.");
         } else {
@@ -424,6 +515,7 @@ public class Menu {
     }
 
     private void modificarCoche() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoCochesTotalesDefinitivo().isEmpty()) {
             System.out.println("No existen coches.");
         } else {
@@ -492,6 +584,7 @@ public class Menu {
     }
 
     private void altaCliente() throws ExceptionParametrosInvalidos {
+        sc.useDelimiter("\n");
         System.out.println("Introduzca los siguientes datos para dar de alta un cliente.");
         System.out.println("DNI:");
         String dni = sc.next();
@@ -511,6 +604,7 @@ public class Menu {
     }
 
     private void bajaCliente() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoClientes().isEmpty()) {
             System.out.println("No existen clientes.");
         } else {
@@ -558,6 +652,7 @@ public class Menu {
     }
 
     private void modificarCliente() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoClientes().isEmpty()) {
             System.out.println("No existen clientes.");
         } else {
@@ -602,6 +697,7 @@ public class Menu {
     }
 
     private void altaMecanico() throws ExceptionParametrosInvalidos {
+        sc.useDelimiter("\n");
         System.out.println("DNI:");
         String dni = sc.next();
         if (concesionario.getListadoMecanicos().containsKey(dni))
@@ -620,6 +716,7 @@ public class Menu {
     }
 
     private void bajaMecanico() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoMecanicos().isEmpty()) {
             System.out.println("No existen mecánicos.");
         } else {
@@ -663,6 +760,7 @@ public class Menu {
     }
 
     private void modificarMecanico() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoMecanicos().isEmpty()) {
             System.out.println("No existen mecánicos.");
         } else {
@@ -707,6 +805,7 @@ public class Menu {
     }
 
     private void mandarRepararCoche() {
+        sc.useDelimiter("\n");
         if (concesionario.getListadoMecanicos().isEmpty()) {
             System.out.println("No se puede crear una reparación sin un mecánico.");
         } else {
@@ -764,6 +863,7 @@ public class Menu {
     }
 
     private void solucionarReparacion() {
+        sc.useDelimiter("\n");
         if (concesionario.listaMecanicos().isEmpty()) {
             System.out.println("No se puede crear una reparación sin un mecánico.");
         } else {
@@ -782,6 +882,7 @@ public class Menu {
     }
 
     public void consultarReparaciones(String matricula) {
+        sc.useDelimiter("\n");
         Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
         if (c.getReparaciones().isEmpty()) {
             System.out.println("No se ha realizado ninguna reparación.");
@@ -831,7 +932,8 @@ public class Menu {
                     }
                     break;
                 case 4:
-
+                    System.out.println("Listado de coches disponibles para comprar: ");
+                    System.out.println(concesionario.verCochesVenta());
                     break;
                 case 9:
                     System.out.println("Saliendo.....");
@@ -845,7 +947,7 @@ public class Menu {
     }
 
     private void gestionDirectorComercial() {
-        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n");
         boolean salir = false;
         int opcion;
         if (d1 == null) {
@@ -944,11 +1046,13 @@ public class Menu {
                             }
                         }
                     } while (repetir);
-                    VendedorComision v1 = concesionario.getListadoVendedores().get(dni);
-                    System.out.println("El listado de coches vendidos por " + v1.getNombre() + " es:");
-                    System.out.println(v1.getCochesVendidos().values());
-                    int sueldo = v1.getCochesVendidos().size() * 200;
-                    System.out.println("El sueldo es: " + sueldo);
+                    VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
+                    if (vendedor != null) {
+                        System.out.println("El listado de coches vendidos por " + vendedor.getNombre() + " es:");
+                        System.out.println(vendedor.getCochesVendidos().values());
+                        int sueldo = vendedor.getCochesVendidos().size() * 200;
+                        System.out.println("El sueldo es: " + sueldo);
+                    }
                     break;
                 case 5:
                     System.out.println(consultarReservas());
@@ -1090,6 +1194,9 @@ public class Menu {
             System.out.println("2.-Dar de baja un vendedor.");
             System.out.println("3.-Modificar un vendedor.");
             System.out.println("4.-Visualizar los vendedores.");
+            System.out.println("5.-Vender un coche.");
+            System.out.println("6.-Reservar un coche.");
+            System.out.println("7.-Cancelar reserva de un coche.");
             System.out.println("9.-Volver.");
             int option = sc.nextInt();
             switch (option) {
@@ -1119,6 +1226,33 @@ public class Menu {
                     break;
                 case 4:
                     System.out.println(concesionario.verListaVendedores());
+                    break;
+                case 5:
+                    System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
+                    String dni = sc.next();
+                    try {
+                        venderCoche(dni);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 6:
+                    System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
+                    dni = sc.next();
+                    try {
+                        reservarCoche(dni);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 7:
+                    System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
+                    dni = sc.next();
+                    try{
+                        cancelarReserva(dni);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 case 9:
                     salir3 = true;
@@ -1253,54 +1387,25 @@ public class Menu {
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
-                    System.out.println("Indica la matricula del coche que quieres vender.");
-                    System.out.println("Listado de coches en Stock:");
-                    System.out.println(concesionario.verCochesVenta());
-                    System.out.println("Listado de coches reservados:");
-                    System.out.println(concesionario.verCochesReservados());
-                    matricula = sc.next();
-                    Coche coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-                    System.out.println("Indica el DNI del cliente:");
-                    dni = sc.next();
-                    Cliente cliente = concesionario.getListadoClientes().get(dni);
                     try {
-                        v1.venderCoche(coche, cliente);
-                        cliente.agregarCocheComprado(coche);
-                    } catch (ExceptionParametrosInvalidos e) {
-                        System.out.println(e.getMessage());
+                        venderCoche(dni);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
                 case 2:
-                    System.out.println("Indica la matricula del coche que quieres reservar.");
-                    System.out.println("Listado de coches en Stock:");
-                    System.out.println(concesionario.verCochesVenta());
-                    matricula = sc.next();
-                    concesionario.existeCoche(matricula);
-                    coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-                    System.out.println("Indica el DNI del cliente:");
-                    dni = sc.next();
-                    concesionario.existeCliente(dni);
-                    cliente = concesionario.getListadoClientes().get(dni);
                     try {
-                        v1.reservarCoche(coche, cliente);
-                        cliente.agregarCocheReservado(coche);
-                    } catch (ExceptionParametrosInvalidos e) {
-                        System.out.println(e.getMessage());
+                        reservarCoche(dni);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
                 case 3:
-                    System.out.println("Indica el DNI del cliente:");
-                    dni = sc.next();
-                    concesionario.existeCliente(dni);
-                    cliente = concesionario.getListadoClientes().get(dni);
-                    if (cliente.getReservados().isEmpty())
-                        throw new ExceptionParametrosInvalidos("El cliente no tiene ningun coche reservado.");
-                    System.out.println("Indica la matricula del coche a cancelar.");
-                    matricula = sc.next();
-                    coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-                    if (cliente.getReservados().contains(coche)) {
-                        v1.cancelarReserva(coche, cliente);
-                    } else System.out.println("Este coche no está reservado por este cliente.");
+                    try{
+                        cancelarReserva(dni);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 case 4:
                     System.out.println(concesionario.verCochesConcesionario());

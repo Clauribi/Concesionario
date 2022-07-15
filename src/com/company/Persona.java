@@ -31,16 +31,19 @@ public class Persona {
 
     public void setNombre(String nombre) throws ExceptionParametrosInvalidos {
         if(nombre==null) throw new ExceptionParametrosInvalidos("El nombre no puede ser null.");
+        if(nombre.isEmpty()) throw new ExceptionParametrosInvalidos("El nombre no puede estar vacío.");
         this.nombre = nombre;
     }
 
     public void setDireccion(String direccion) throws ExceptionParametrosInvalidos {
         if(direccion==null) throw new ExceptionParametrosInvalidos("La dirección no puede ser null.");
+        if(direccion.isEmpty()) throw new ExceptionParametrosInvalidos("La dirección no puede estar vacía.");
         this.direccion = direccion;
     }
 
     public void setDni(String dni) throws ExceptionParametrosInvalidos {
-        if(dni==null) throw new ExceptionParametrosInvalidos("El dni no puede ser null.");
+        if(dni==null) throw new ExceptionParametrosInvalidos("El DNI no puede ser null.");
+        if(dni.isEmpty()) throw new ExceptionParametrosInvalidos("El DNI no puede estar vacía.");
         this.dni = dni;
     }
 
