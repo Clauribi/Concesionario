@@ -35,9 +35,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("Indica una matrícula de la lista o escriba 'salir' para volver.");
                 matricula = sc.next();
-                if (matricula != "salir") {
+                if (!matricula.equals("salir")) {
                     repetir = true;
-                } else if (matricula == "salir") {
+                } else if (matricula.equals("salir")) {
                     repetir = false;
                 }
             }
@@ -80,9 +80,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -121,9 +121,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("Indica una matrícula de la lista o escriba 'salir' para volver.");
                 matricula = sc.next();
-                if (matricula != "salir") {
+                if (!matricula.equals("salir")) {
                     repetir = true;
-                } else if (matricula == "salir") {
+                } else if (matricula.equals("salir")) {
                     repetir = false;
                 }
             }
@@ -141,9 +141,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -178,9 +178,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("Indica un DNI de la lista o escribe 'salir' para volver.");
                 dni = sc.next();
-                if (dni != "salir") {
+                if (!dni.equals("salir")) {
                     repetir = true;
-                } else if (dni == "salir") {
+                } else if (dni.equals("salir")) {
                     repetir = false;
                 }
             }
@@ -204,9 +204,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Indique una matrícula de la lista o escriba 'salir' para volver.");
                     matricula = sc.next();
-                    if (matricula != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (matricula == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -228,9 +228,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("El DNI indicado no está en la lista. Introduzca un DNI de la lista o escriba 'salir para volver.");
                 dni = sc.next();
-                if (dni != "salir") {
+                if (!dni.equals("salir")) {
                     repetir = true;
-                } else if (dni == "salir") {
+                } else if (dni.equals("salir")) {
                     repetir = false;
                 }
             }
@@ -280,9 +280,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -331,9 +331,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -504,8 +504,8 @@ public class Menu {
 
     private void menuCambiarCocheExposicion() {
         sc.useDelimiter("\n");
-        String matricula = null;
-        int numExpo = 0;
+        String matricula;
+        int numExpo;
         boolean repetir = false;
         boolean existe = false;
         System.out.println("Listado de coches disponibles.");
@@ -523,9 +523,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("Indica una matrícula correcta o escribe 'salir' para cancelar");
                 matricula = sc.next();
-                if (matricula != "salir") {
+                if (!matricula.equals("salir")) {
                     repetir = true;
-                } else if (matricula == "salir") {
+                } else if (matricula.equals("salir")) {
                     repetir = false;
                 }
             }
@@ -623,9 +623,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un coche de la lista o escribe 'salir' para volver.");
                     matricula = sc.next();
-                    if (matricula != "salir") {
+                    if (!matricula.equals("salir")) {
                         repetir = true;
-                    } else if (matricula == "salir") {
+                    } else if (matricula.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -669,9 +669,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un coche de la lista o escribe 'salir' para volver.");
                     matricula = sc.next();
-                    if (matricula != "salir") {
+                    if (!matricula.equals("salir")) {
                         repetir = true;
-                    } else if (matricula == "salir") {
+                    } else if (matricula.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -761,9 +761,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -812,9 +812,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -879,9 +879,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -926,9 +926,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
-                    if (dni != "salir") {
+                    if (!dni.equals("salir")) {
                         repetir = true;
-                    } else if (dni == "salir") {
+                    } else if (dni.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -973,9 +973,9 @@ public class Menu {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca una matrícula de la lista o escriba 'salir' para volver.");
                     matricula = sc.next();
-                    if (matricula != "salir") {
+                    if (!matricula.equals("salir")) {
                         repetir = true;
-                    } else if (matricula == "salir") {
+                    } else if (matricula.equals("salir")) {
                         repetir = false;
                     }
                 }
@@ -1036,11 +1036,16 @@ public class Menu {
 
     public void consultarReparaciones(String matricula) {
         sc.useDelimiter("\n");
-        Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-        if (c.getReparaciones().isEmpty()) {
+        Coche coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
+        coche.getReparaciones().sort(
+                (reparacion1, reparacion2) -> {
+                    return reparacion1.compareTo(reparacion2);
+                }
+        );
+        if (coche.getReparaciones().isEmpty()) {
             System.out.println("No se ha realizado ninguna reparación.");
         } else {
-            for (Reparacion r : c.getReparaciones()) {
+            for (Reparacion r : coche.getReparaciones()) {
                 if (r.isResuelta() == true) {
                     System.out.println(r.getInfo());
                 }
@@ -1197,9 +1202,9 @@ public class Menu {
                             System.out.println(e.getMessage());
                             System.out.println("Indique un DNI de la lista o escriba 'salir' para volver.");
                             dni = sc.next();
-                            if (dni != "salir") {
+                            if (!dni.equals("salir")) {
                                 repetir = true;
-                            } else if (dni == "salir") {
+                            } else if (dni.equals("salir")) {
                                 repetir = false;
                             }
                         }
@@ -1403,20 +1408,14 @@ public class Menu {
                                 repetir = false;
                             } catch (ExceptionParametrosInvalidos e) {
                                 System.out.println(e.getMessage());
-                                System.out.println("¿Deseas volver a intentarlo?.");
-                                System.out.println("1.-Sí");
-                                System.out.println("2.-No");
-                                option = sc.nextInt();
-                                switch (option) {
-                                    case 1:
-                                        repetir = true;
-                                        break;
-                                    case 2:
-                                        repetir = false;
-                                        break;
-                                    default:
-                                        System.out.println("Opción incorrecta");
+                                System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
+                                dni = sc.next();
+                                if (!dni.equals("salir")) {
+                                    repetir = true;
+                                } else if (dni.equals("salir")) {
+                                    repetir = false;
                                 }
+
                             }
                         } while (repetir);
                         VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
@@ -1445,9 +1444,9 @@ public class Menu {
                                 System.out.println(e.getMessage());
                                 System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                                 dni = sc.next();
-                                if (dni != "salir") {
+                                if (!dni.equals("salir")) {
                                     repetir = true;
-                                } else if (dni == "salir") {
+                                } else if (dni.equals("salir")) {
                                     repetir = false;
                                 }
                             }
@@ -1478,9 +1477,9 @@ public class Menu {
                                 System.out.println(e.getMessage());
                                 System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                                 dni = sc.next();
-                                if (dni != "salir") {
+                                if (!dni.equals("salir")) {
                                     repetir = true;
-                                } else if (dni == "salir") {
+                                } else if (dni.equals("salir")) {
                                     repetir = false;
                                 }
                             }
