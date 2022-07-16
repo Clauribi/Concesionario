@@ -1024,21 +1024,21 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     try {
-                        gestionDirectorComercial();
+                        menuDirectorComercial();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
                 case 2:
                     try {
-                        gestionVendedoresComision();
+                        menuVendedoresComision();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
                 case 3:
                     try {
-                        gestionMecanico();
+                        menuMecanico();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1058,7 +1058,7 @@ public class Menu {
         }
     }
 
-    private void gestionDirectorComercial() {
+    private void menuDirectorComercial() {
         sc.useDelimiter("\n");
         boolean salir = false;
         int opcion;
@@ -1535,184 +1535,158 @@ public class Menu {
         }
     }
 
-    private void gestionVendedoresComision() throws ExceptionParametrosInvalidos {
+    private void menuVendedoresComision() throws ExceptionParametrosInvalidos {
+        if (concesionario.getListadoVendedores().isEmpty()) {
+            throw new ExceptionParametrosInvalidos("No hay vendedores dados de alta.");
+        }
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
+        boolean repetir = false;
         int opcion;
         System.out.println("Indica tu DNI para acceder:");
         String dni = sc.next();
-        concesionario.existeVendedor(dni);
+        do {
+            try {
+                concesionario.existeVendedor(dni);
+                repetir = false;
+            } catch (ExceptionParametrosInvalidos e) {
+                System.out.println(e.getMessage());
+                System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
+                dni = sc.next();
+                if (dni != "salir") {
+                    repetir = true;
+                }
+            }
+        } while (repetir);
         VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
-        System.out.println("Bienvenido " + vendedor.getNombre());
-        while (!salir) {
-            System.out.println("Indica la acción a realizar:");
-            System.out.println("1.-Vender un coche.");
-            System.out.println("2.-Reservar un coche.");
-            System.out.println("3.-Cancelar reserva de un coche.");
-            System.out.println("4.-Consultar coches.");
-            System.out.println("5.-Consultar exposiciones.");
-            System.out.println("6.-Consultar clientes.");
-            System.out.println("9.-Volver.");
-            opcion = sc.nextInt();
-            switch (opcion) {
-                case 1:
-                    try {
-                        venderCoche(vendedor);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    try {
-                        reservarCoche(vendedor);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 3:
-                    try {
-                        cancelarReserva(vendedor);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 4:
-                    System.out.println(concesionario.verCochesConcesionario());
-                    break;
-                case 5:
-                    try {
-                        verDatosExposicion();
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 6:
-                    System.out.println(concesionario.verListaClientes());
-                    break;
-                case 9:
-                    salir = true;
-                    break;
-                default:
-                    System.out.println("Opción incorrecta");
-                    break;
+        if (vendedor != null) {
+            System.out.println("Bienvenido " + vendedor.getNombre());
+            while (!salir) {
+                System.out.println("Indica la acción a realizar:");
+                System.out.println("1.-Vender un coche.");
+                System.out.println("2.-Reservar un coche.");
+                System.out.println("3.-Cancelar reserva de un coche.");
+                System.out.println("4.-Consultar coches.");
+                System.out.println("5.-Consultar exposiciones.");
+                System.out.println("6.-Consultar clientes.");
+                System.out.println("9.-Volver.");
+                opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1:
+                        try {
+                            venderCoche(vendedor);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        try {
+                            reservarCoche(vendedor);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 3:
+                        try {
+                            cancelarReserva(vendedor);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 4:
+                        System.out.println(concesionario.verCochesConcesionario());
+                        break;
+                    case 5:
+                        try {
+                            verDatosExposicion();
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 6:
+                        System.out.println(concesionario.verListaClientes());
+                        break;
+                    case 9:
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Opción incorrecta");
+                        break;
+                }
             }
         }
     }
-
-
-    private void gestionMecanico() throws ExceptionParametrosInvalidos {
+    private void menuMecanico() throws ExceptionParametrosInvalidos {
+        if (concesionario.getListadoMecanicos().isEmpty()) {
+            throw new ExceptionParametrosInvalidos("No hay mecanicos dados de alta.");
+        }
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
+        boolean repetir = false;
         int opcion;
         String matricula;
         System.out.println("Indica tu DNI para acceder:");
         String dni = sc.next();
-        concesionario.existeMecanico(dni);
+        do {
+            try {
+                concesionario.existeMecanico(dni);
+                repetir = false;
+            } catch (ExceptionParametrosInvalidos e) {
+                System.out.println(e.getMessage());
+                System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
+                dni = sc.next();
+                if (dni != "salir") {
+                    repetir = true;
+                }
+            }
+        } while (repetir);
         Mecanico mecanico = concesionario.getListadoMecanicos().get(dni);
-        System.out.println("Bienvenido " + mecanico.getNombre());
-        while (!salir) {
-            System.out.println("Elige que deseas hacer.");
-            System.out.println("1.-Reparar un coche.");
-            System.out.println("2.-Solucionar reparación.");
-            System.out.println("3.-Consultar listado reparaciones realizadas.");
-            System.out.println("9.-Volver.");
-            opcion = sc.nextInt();
-            switch (opcion) {
-                case 1:
-                    try {
-                        mandarRepararCoche();
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 2:
-                    try {
-                        solucionarReparacion();
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 3:
-                    System.out.println("Indica la matrícula del coche a consultar:");
-                    matricula = sc.next();
-                    try {
-                        concesionario.existeCoche(matricula);
-                    } catch (ExceptionParametrosInvalidos e) {
-                        System.out.println(e.getMessage());
-                    }
-                    try {
-                        consultarReparaciones(matricula);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 9:
-                    salir = true;
-                    break;
-                default:
-                    System.out.println("Opción incorrecta");
-                    break;
+        if (mecanico != null) {
+            System.out.println("Bienvenido " + mecanico.getNombre());
+            while (!salir) {
+                System.out.println("Elige que deseas hacer.");
+                System.out.println("1.-Reparar un coche.");
+                System.out.println("2.-Solucionar reparación.");
+                System.out.println("3.-Consultar listado reparaciones realizadas.");
+                System.out.println("9.-Volver.");
+                opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1:
+                        try {
+                            mandarRepararCoche();
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 2:
+                        try {
+                            solucionarReparacion();
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Indica la matrícula del coche a consultar:");
+                        matricula = sc.next();
+                        try {
+                            concesionario.existeCoche(matricula);
+                        } catch (ExceptionParametrosInvalidos e) {
+                            System.out.println(e.getMessage());
+                        }
+                        try {
+                            consultarReparaciones(matricula);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 9:
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Opción incorrecta");
+                        break;
+                }
             }
         }
     }
-
-
-//    private ArrayList getListadoCoches() {
-//        Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
-//        ArrayList<Coche> listadoTotalCoches = new ArrayList<>(valores);
-//        return listadoTotalCoches;
-//    }
-
-
-//    private ArrayList getListadoExposiciones() {
-//        Collection<Exposicion> valores = this.listadoExposiciones.values();
-//        ArrayList<Exposicion> listadoTotalExposiciones = new ArrayList<>(valores);
-//        return listadoTotalExposiciones;
-//    }
-//
-//    private String getDatosExposicion(int expo) {
-//        if (listadoExposiciones.containsKey(expo)) {
-//            Exposicion exposicion = listadoExposiciones.get(expo);
-//            return exposicion.getInfo();
-//        } else {
-//            return "La exposición número " + expo + " no existe.";
-//        }
-//    }
-//
-//    private String getDatosCochesExpo(int expo) {
-//        ArrayList<String> listadoCochesExposicion = new ArrayList<>();
-//        for (Coche c : listadoCochesTotalesDefinitivo.values()) {
-//            if (c.getExposicion().getNumExposicion() == expo) {
-//                listadoCochesExposicion.add(c.getInfo());
-//            }
-//        }
-//        return listadoCochesExposicion.toString();
-//    }
-//
-//    private ArrayList getCochesPorExposicion(int expo) {
-//        Collection<Coche> valores = this.listadoCochesTotalesDefinitivo.values();
-//        ArrayList<Coche> listaCoches = new ArrayList<>(valores);
-//        ArrayList<Coche> listaCochesEnExposicion = new ArrayList<>();
-//        for (Coche c : listaCoches) {
-//            if (c.getExposicion().getNumExposicion() == expo) {
-//                listaCochesEnExposicion.add(c);
-//            }
-//        }
-//        return listaCochesEnExposicion;
-//    }
-//
-//    private String getDatosVendedores() {
-//        ArrayList<String> datosVendedores = new ArrayList<>();
-//        for (VendedorComision v : listadoVendedores.values()) {
-//            datosVendedores.add(v.getInfo());
-//        }
-//        return datosVendedores.toString();
-//    }
-//
-//
-//
-//    private String mostrarCliente(String matricula) {
-//        Coche c = listadoCochesTotalesDefinitivo.get(matricula);
-//        return c.getCliente().getNombre();
-//    }
 }

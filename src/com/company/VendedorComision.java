@@ -26,7 +26,7 @@ public class VendedorComision extends Persona {
                 cliente.agregarCocheComprado(coche);
                 coche.setCliente(cliente);
             } else {
-                throw new ExceptionParametrosInvalidos("El coche con matricula " + coche.getMatricula() + " está reservado por " + coche.getCliente());
+                throw new ExceptionParametrosInvalidos("El coche con matricula " + coche.getMatricula() + " está reservado por " + coche.getCliente().getNombre());
             }
         } else {
             throw new ExceptionParametrosInvalidos("El coche no se puede vender porque el estado es " + coche.getEstado());
