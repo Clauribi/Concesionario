@@ -1,8 +1,4 @@
 package com.company;
-
-import javax.sound.midi.Soundbank;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Scanner;
 
 public class Menu {
