@@ -27,8 +27,8 @@ public class Menu {
             try {
                 concesionario.existeCoche(matricula);
                 coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-                if (!concesionario.listaCochesReservados().contains(coche) || !concesionario.listaCochesStock().contains(coche)) {
-                    throw new ExceptionParametrosInvalidos("El coche no está en venta o reservado.");
+                if (!concesionario.listaCochesReservados().contains(coche) && !concesionario.listaCochesStock().contains(coche)) {
+                    throw new ExceptionParametrosInvalidos("El coche no está en venta ni reservado.");
                 }
                 repetir = false;
             } catch (ExceptionParametrosInvalidos e) {
@@ -66,36 +66,36 @@ public class Menu {
                         System.out.println("Opción incorrecta");
                         break;
                 }
-            }
-        } else {
-            System.out.println("Listado de clientes.");
-            System.out.println(concesionario.verListaClientes());
-            System.out.println("Indica el DNI del cliente:");
-            String dni = sc.next();
-            do {
-                try {
-                    concesionario.existeCliente(dni);
-                    repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
-                    System.out.println(e.getMessage());
-                    System.out.println("Indica un DNI de la lista o escriba 'salir' para volver.");
-                    dni = sc.next();
-                    if (!dni.equals("salir")) {
-                        repetir = true;
-                    } else if (dni.equals("salir")) {
+            } else {
+                System.out.println("Listado de clientes.");
+                System.out.println(concesionario.verListaClientes());
+                System.out.println("Indica el DNI del cliente:");
+                String dni = sc.next();
+                do {
+                    try {
+                        concesionario.existeCliente(dni);
                         repetir = false;
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Indica un DNI de la lista o escriba 'salir' para volver.");
+                        dni = sc.next();
+                        if (!dni.equals("salir")) {
+                            repetir = true;
+                        } else if (dni.equals("salir")) {
+                            repetir = false;
+                        }
                     }
-                }
-            } while (repetir);
-            Cliente cliente = concesionario.getListadoClientes().get(dni);
-            if (cliente != null) {
-                try {
-                    vendedor.venderCoche(coche, cliente);
-                    cliente.agregarCocheComprado(coche);
-                    coche.setCliente(cliente);
-                    System.out.println("Venta realizada con éxito.");
-                } catch (ExceptionParametrosInvalidos e) {
-                    System.out.println(e.getMessage());
+                } while (repetir);
+                Cliente cliente = concesionario.getListadoClientes().get(dni);
+                if (cliente != null) {
+                    try {
+                        vendedor.venderCoche(coche, cliente);
+                        cliente.agregarCocheComprado(coche);
+                        coche.setCliente(cliente);
+                        System.out.println("Venta realizada con éxito.");
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
         }
