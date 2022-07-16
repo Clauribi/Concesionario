@@ -38,6 +38,15 @@ public class Concesionario {
         Exposicion exposicion = new Exposicion(1, "Calle Alvarado 2", 678345629);
         this.listadoExposiciones.put(1, exposicion);
     }
+    public void cambiarCocheExposicion(String matricula, int numExpo) throws ExceptionParametrosInvalidos {
+        Coche c = listadoCochesTotalesDefinitivo.get(matricula);
+        Exposicion exposicion = listadoExposiciones.get(numExpo);
+        if (c.getExposicion().getNumExposicion() == numExpo) {
+            throw new ExceptionParametrosInvalidos("El cambio no se va a realizar porque el coche ya estaba en esa exposición");
+        } else {
+            c.cambiarExposicion(exposicion);
+        }
+    }
 
     public ArrayList<Coche> cochesReservadosCliente(String dni) {
         Cliente cliente = listadoClientes.get(dni);

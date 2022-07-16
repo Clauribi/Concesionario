@@ -501,21 +501,6 @@ public class Menu {
         }
     }
 
-    public void cambiarCocheExposicion(String matricula, int numExpo) {
-        sc.useDelimiter("\n");
-        Coche c = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-        Exposicion exposicion = concesionario.getListadoExposiciones().get(numExpo);
-        if (c.getExposicion().getNumExposicion() == numExpo) {
-            System.out.println("El cambio no se va a realizar porque el coche ya estaba en esa exposición");
-        } else {
-            try {
-                c.cambiarExposicion(exposicion);
-                System.out.println("Cambio realizado con éxito.");
-            } catch (ExceptionParametrosInvalidos e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 
     private void menuCambiarCocheExposicion() {
         sc.useDelimiter("\n");
@@ -528,8 +513,15 @@ public class Menu {
         System.out.println("Indica la matrícula del coche que desea cambiar:");
         matricula = sc.next();
         do {
-            if (!concesionario.enVenta(matricula)) {
-                System.out.println("La matrícula no está en la lista. Indica una matrícula correcta o escribe 'salir' para cancelar.");
+            try {
+                concesionario.existeCoche(matricula);
+                if (!concesionario.enVenta(matricula)) {
+                    throw new ExceptionParametrosInvalidos("La matrícula no está en la lista.");
+                }
+                repetir = false;
+            } catch (ExceptionParametrosInvalidos e) {
+                System.out.println(e.getMessage());
+                System.out.println("Indica una matrícula correcta o escribe 'salir' para cancelar");
                 matricula = sc.next();
                 if (matricula != "salir") {
                     repetir = true;
@@ -538,28 +530,31 @@ public class Menu {
                 }
             }
         } while (repetir);
-        if (concesionario.enVenta(matricula)) {
-            System.out.println("Indica la exposición de destino:");
-            System.out.println(concesionario.verListaExposiciones());
-            numExpo = sc.nextInt();
-            do {
-                try {
-                    concesionario.existeExposicion(numExpo);
-                    cambiarCocheExposicion(matricula, numExpo);
-                    System.out.println("Cambio realizado con éxito.");
-                    repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
-                    System.out.println(e.getMessage());
-                    System.out.println("Introduzca un número de la lista o indique 0 para volver.");
-                    numExpo = sc.nextInt();
-                    if (numExpo != 0) {
-                        repetir = true;
-                    } else if (numExpo == 0) {
+        if (matricula != "salir") {
+            if (concesionario.enVenta(matricula)) {
+                System.out.println("Indica la exposición de destino:");
+                System.out.println(concesionario.verListaExposiciones());
+                numExpo = sc.nextInt();
+                do {
+                    try {
+                        concesionario.existeExposicion(numExpo);
+                        concesionario.cambiarCocheExposicion(matricula, numExpo);
+                        System.out.println("Cambio realizado con éxito.");
                         repetir = false;
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Introduzca un número de la lista o indique 0 para volver.");
+                        numExpo = sc.nextInt();
+                        if (numExpo != 0) {
+                            repetir = true;
+                        } else if (numExpo == 0) {
+                            repetir = false;
+                        }
                     }
-                }
-            } while (repetir);
+                } while (repetir);
+            }
         }
+
     }
 
     private void altaCoche() throws ExceptionParametrosInvalidos {
@@ -597,7 +592,6 @@ public class Menu {
                 break;
             default:
                 System.out.println("Tipo erróneo");
-                break;
         }
         System.out.println("Nº exposición: ");
         int numExpo = sc.nextInt();
@@ -652,7 +646,6 @@ public class Menu {
                         break;
                     default:
                         System.out.println("Opción incorrecta.");
-                        break;
                 }
             }
         }
@@ -678,7 +671,7 @@ public class Menu {
                     matricula = sc.next();
                     if (matricula != "salir") {
                         repetir = true;
-                    } else if (matricula == "salir"){
+                    } else if (matricula == "salir") {
                         repetir = false;
                     }
                 }
@@ -713,7 +706,7 @@ public class Menu {
                         break;
                     default:
                         System.out.println("Tipo erróneo");
-                        break;
+
                 }
                 System.out.println("Nº exposición: ");
                 int expo = sc.nextInt();
@@ -770,7 +763,7 @@ public class Menu {
                     dni = sc.next();
                     if (dni != "salir") {
                         repetir = true;
-                    } else if (dni == "salir"){
+                    } else if (dni == "salir") {
                         repetir = false;
                     }
                 }
@@ -821,7 +814,7 @@ public class Menu {
                     dni = sc.next();
                     if (dni != "salir") {
                         repetir = true;
-                    } else if (dni == "salir"){
+                    } else if (dni == "salir") {
                         repetir = false;
                     }
                 }
@@ -888,7 +881,7 @@ public class Menu {
                     dni = sc.next();
                     if (dni != "salir") {
                         repetir = true;
-                    } else if (dni == "salir"){
+                    } else if (dni == "salir") {
                         repetir = false;
                     }
                 }
@@ -935,7 +928,7 @@ public class Menu {
                     dni = sc.next();
                     if (dni != "salir") {
                         repetir = true;
-                    } else if (dni == "salir"){
+                    } else if (dni == "salir") {
                         repetir = false;
                     }
                 }
@@ -982,7 +975,7 @@ public class Menu {
                     matricula = sc.next();
                     if (matricula != "salir") {
                         repetir = true;
-                    } else if (matricula == "salir"){
+                    } else if (matricula == "salir") {
                         repetir = false;
                     }
                 }
@@ -1206,7 +1199,7 @@ public class Menu {
                             dni = sc.next();
                             if (dni != "salir") {
                                 repetir = true;
-                            } else if (dni == "salir"){
+                            } else if (dni == "salir") {
                                 repetir = false;
                             }
                         }
@@ -1356,6 +1349,7 @@ public class Menu {
     private void gestionVendedores(Scanner sc) {
         boolean salir3 = false;
         boolean repetir = false;
+        String dni = null;
         while (!salir3) {
             System.out.println("1.-Dar de alta un vendedor.");
             System.out.println("2.-Dar de baja un vendedor.");
@@ -1386,99 +1380,118 @@ public class Menu {
                 case 3:
                     try {
                         modificarVendedorComision();
+                        System.out.println("Se han realizado las modificaciones indicadas.");
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.out.println("Se han realizado las modificaciones indicadas.");
                     break;
                 case 4:
                     System.out.println(concesionario.verListaVendedores());
                     break;
                 case 5:
-                    System.out.println("Listado de vendedores.");
-                    System.out.println(concesionario.verListaVendedores());
-                    System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
-                    String dni = sc.next();
-                    do {
-                        try {
-                            concesionario.existeVendedor(dni);
-                            repetir = false;
-                        } catch (ExceptionParametrosInvalidos e) {
-                            System.out.println(e.getMessage());
-                            System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
+                    if (concesionario.getListadoVendedores().isEmpty()) {
+                        System.out.println("No existen vendedores dados de alta.");
+                    } else {
+                        System.out.println("Listado de vendedores.");
+                        System.out.println(concesionario.verListaVendedores());
+                        System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
+                        do {
                             dni = sc.next();
-                            if (dni != "salir") {
-                                repetir = true;
-                            } else if (dni == "salir"){
+                            try {
+                                concesionario.existeVendedor(dni);
                                 repetir = false;
+                            } catch (ExceptionParametrosInvalidos e) {
+                                System.out.println(e.getMessage());
+                                System.out.println("¿Deseas volver a intentarlo?.");
+                                System.out.println("1.-Sí");
+                                System.out.println("2.-No");
+                                option = sc.nextInt();
+                                switch (option) {
+                                    case 1:
+                                        repetir = true;
+                                        break;
+                                    case 2:
+                                        repetir = false;
+                                        break;
+                                    default:
+                                        System.out.println("Opción incorrecta");
+                                }
                             }
-                        }
-                    } while (repetir);
-                    VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
-                    if (vendedor != null) {
-                        try {
-                            venderCoche(vendedor);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } while (repetir);
+                        VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
+                        if (vendedor != null) {
+                            try {
+                                venderCoche(vendedor);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     break;
                 case 6:
-                    System.out.println("Listado de vendedores.");
-                    System.out.println(concesionario.verListaVendedores());
-                    System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
-                    dni = sc.next();
-                    do {
-                        try {
-                            concesionario.existeVendedor(dni);
-                            repetir = false;
-                        } catch (ExceptionParametrosInvalidos e) {
-                            System.out.println(e.getMessage());
-                            System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
-                            dni = sc.next();
-                            if (dni != "salir") {
-                                repetir = true;
-                            } else if (dni == "salir"){
+                    if (concesionario.getListadoVendedores().isEmpty()) {
+                        System.out.println("No existen vendedores dados de alta.");
+                    } else {
+                        System.out.println("Listado de vendedores.");
+                        System.out.println(concesionario.verListaVendedores());
+                        System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
+                        dni = sc.next();
+                        do {
+                            try {
+                                concesionario.existeVendedor(dni);
                                 repetir = false;
+                            } catch (ExceptionParametrosInvalidos e) {
+                                System.out.println(e.getMessage());
+                                System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
+                                dni = sc.next();
+                                if (dni != "salir") {
+                                    repetir = true;
+                                } else if (dni == "salir") {
+                                    repetir = false;
+                                }
                             }
-                        }
-                    } while (repetir);
-                    vendedor = concesionario.getListadoVendedores().get(dni);
-                    if (vendedor != null) {
-                        try {
-                            reservarCoche(vendedor);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } while (repetir);
+                        VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
+                        if (vendedor != null) {
+                            try {
+                                reservarCoche(vendedor);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     break;
                 case 7:
-                    System.out.println("Listado de vendedores.");
-                    System.out.println(concesionario.verListaVendedores());
-                    System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
-                    dni = sc.next();
-                    do {
-                        try {
-                            concesionario.existeVendedor(dni);
-                            repetir = false;
-                        } catch (ExceptionParametrosInvalidos e) {
-                            System.out.println(e.getMessage());
-                            System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
-                            dni = sc.next();
-                            if (dni != "salir") {
-                                repetir = true;
-                            }  else if (dni == "salir"){
+                    if (concesionario.getListadoVendedores().isEmpty()) {
+                        System.out.println("No existen vendedores dados de alta.");
+                    } else {
+                        System.out.println("Listado de vendedores.");
+                        System.out.println(concesionario.verListaVendedores());
+                        System.out.println("Indica el DNI del vendedor que va a realizar la operación.");
+                        dni = sc.next();
+                        do {
+                            try {
+                                concesionario.existeVendedor(dni);
                                 repetir = false;
+                            } catch (ExceptionParametrosInvalidos e) {
+                                System.out.println(e.getMessage());
+                                System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
+                                dni = sc.next();
+                                if (dni != "salir") {
+                                    repetir = true;
+                                } else if (dni == "salir") {
+                                    repetir = false;
+                                }
                             }
-
-                        }
-                    } while (repetir);
-                    vendedor = concesionario.getListadoVendedores().get(dni);
-                    if (vendedor != null) {
-                        try {
-                            cancelarReserva(vendedor);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } while (repetir);
+                        VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
+                        if (vendedor != null) {
+                            try {
+                                cancelarReserva(vendedor);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     break;
@@ -1611,9 +1624,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
                 dni = sc.next();
-                if (dni != "salir") {
+                if (!dni.equals("salir")) {
                     repetir = true;
-                } else if (dni == "salir"){
+                } else if (dni.equals("salir")) {
                     repetir = false;
                 }
             }
@@ -1696,9 +1709,9 @@ public class Menu {
                 System.out.println(e.getMessage());
                 System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
                 dni = sc.next();
-                if (dni != "salir") {
+                if (!dni.equals("salir")) {
                     repetir = true;
-                } else if (dni == "salir") {
+                } else if (dni.equals("salir")) {
                     repetir = false;
                 }
             }
