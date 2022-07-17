@@ -54,6 +54,7 @@ public class Menu {
                         case 1:
                             try {
                                 vendedor.venderCoche(coche, coche.getCliente());
+                                coche.getCliente().getReservados().remove(matricula);
                                 coche.getCliente().agregarCocheComprado(coche);
                                 System.out.println("Venta realizada con éxito.");
                             } catch (ExceptionParametrosInvalidos e) {
@@ -107,7 +108,7 @@ public class Menu {
         Coche coche = null;
         System.out.println("Listado de coches en Stock:");
         System.out.println(concesionario.verCochesVenta());
-        System.out.println("Indica la matrícula del coche que quieres reservado.");
+        System.out.println("Indica la matrícula del coche que quieres reservar.");
         String matricula = sc.next();
         do {
             try {
@@ -128,7 +129,7 @@ public class Menu {
                 }
             }
         } while (repetir);
-        if (coche != null) {
+        if (!matricula.equals("salir")) {
             System.out.println("Listado de clientes.");
             System.out.println(concesionario.verListaClientes());
             System.out.println("Indica el DNI del cliente para realizar la reserva:");
@@ -154,6 +155,7 @@ public class Menu {
                     vendedor.reservarCoche(coche, cliente);
                     cliente.agregarCocheReservado(coche);
                     coche.setCliente(cliente);
+                    System.out.println("Reserva realizada con éxito.");
                 } catch (ExceptionParametrosInvalidos e) {
                     System.out.println(e.getMessage());
                 }
@@ -194,9 +196,10 @@ public class Menu {
                 try {
                     concesionario.existeCoche(matricula);
                     Coche coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
-                    if (!cliente.getReservados().contains(coche))
+                    if (!cliente.getReservados().containsKey(matricula))
                         throw new ExceptionParametrosInvalidos("El coche no está reservado por este cliente.");
                     vendedor.cancelarReserva(coche);
+                    cliente.getReservados().remove(matricula);
                     repetir = false;
                 } catch (ExceptionParametrosInvalidos e) {
                     System.out.println(e.getMessage());
@@ -237,7 +240,7 @@ public class Menu {
             } while (repetir);
             Cliente cliente = concesionario.getListadoClientes().get(dni);
             if (cliente != null) {
-                String datos = cliente.getInfo() + concesionario.cochesReservadosCliente(dni).toString();
+                String datos = cliente.getInfo() + concesionario.verCochesReservadosCliente(dni);
                 return datos;
             }
         }
@@ -483,6 +486,7 @@ public class Menu {
                     concesionario.existeExposicion(numExpo);
                     System.out.println("Los datos de la exposición son: ");
                     System.out.println(concesionario.verExpo(numExpo) + "\n" + concesionario.verCochesExpo(numExpo));
+                    repetir = false;
                 } catch (ExceptionParametrosInvalidos e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un número de la lista o indique 0 para volver.");
@@ -544,6 +548,7 @@ public class Menu {
                 if (numExpo != 0) {
                     try {
                         concesionario.cambiarCocheExposicion(matricula, numExpo);
+                        System.out.println("Cambio realizado con éxito.");
                     } catch (ExceptionParametrosInvalidos e) {
                         System.out.println(e.getMessage());
                     }
@@ -1004,6 +1009,7 @@ public class Menu {
                 } while (repetir);
                 try {
                     concesionario.cocheAReparar(matricula, t);
+                    System.out.println("Reparación ordenada con éxito.");
                 } catch (ExceptionParametrosInvalidos e) {
                     System.out.println(e.getMessage());
                 }
@@ -1040,6 +1046,7 @@ public class Menu {
             } while (repetir);
             if (!matricula.equals("salir")) {
                 concesionario.cocheReparado(matricula);
+                System.out.println("Reparación solucionada con éxito.");
             }
         }
     }
@@ -1220,9 +1227,11 @@ public class Menu {
                         VendedorComision vendedor = concesionario.getListadoVendedores().get(dni);
                         if (vendedor != null) {
                             System.out.println("El listado de coches vendidos por " + vendedor.getNombre() + " es:");
-                            System.out.println(vendedor.getCochesVendidos().values());
+                            for (Coche coche : vendedor.getCochesVendidos().values()){
+                                System.out.println(coche.getInfo());
+                            }
                             int sueldo = vendedor.getCochesVendidos().size() * 200;
-                            System.out.println("El sueldo es: " + sueldo);
+                            System.out.println("El sueldo es: " + sueldo + " €");
                         }
                     }
                     break;
@@ -1331,7 +1340,6 @@ public class Menu {
                 case 5:
                     try {
                         mandarRepararCoche();
-                        System.out.println("Reparación ordenada con éxito.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1339,7 +1347,6 @@ public class Menu {
                 case 6:
                     try {
                         solucionarReparacion();
-                        System.out.println("Reparación solucionada con éxito.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1349,10 +1356,10 @@ public class Menu {
                     String matricula = sc.next();
                     try {
                         concesionario.existeCoche(matricula);
+                        consultarReparaciones(matricula);
                     } catch (ExceptionParametrosInvalidos e) {
                         System.out.println(e.getMessage());
                     }
-                    consultarReparaciones(matricula);
                     break;
                 case 9:
                     menuDirectorComercial();
@@ -1395,7 +1402,6 @@ public class Menu {
                 case 3:
                     try {
                         modificarVendedorComision();
-                        System.out.println("Se han realizado las modificaciones indicadas.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1464,7 +1470,6 @@ public class Menu {
                         if (vendedor != null) {
                             try {
                                 reservarCoche(vendedor);
-                                System.out.println("Reserva realizada con éxito.");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1498,8 +1503,10 @@ public class Menu {
                         if (vendedor != null) {
                             try {
                                 cancelarReserva(vendedor);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            } catch (ExceptionParametrosInvalidos e) {
+                                System.out.println(e.getMessage());
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
                             }
                         }
                     }
@@ -1555,7 +1562,6 @@ public class Menu {
                 case 5:
                     try {
                         menuCambiarCocheExposicion();
-                        System.out.println("Cambio realizado con éxito.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1658,7 +1664,6 @@ public class Menu {
                     case 2:
                         try {
                             reservarCoche(vendedor);
-                            System.out.println("Reserva realizada con éxito.");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1666,8 +1671,10 @@ public class Menu {
                     case 3:
                         try {
                             cancelarReserva(vendedor);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (ExceptionParametrosInvalidos e) {
+                            System.out.println(e.getMessage());
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
                         }
                         break;
                     case 4:
@@ -1729,7 +1736,6 @@ public class Menu {
                     case 1:
                         try {
                             mandarRepararCoche();
-                            System.out.println("Reparación ordenada con éxito.");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1737,7 +1743,6 @@ public class Menu {
                     case 2:
                         try {
                             solucionarReparacion();
-                            System.out.println("Reparación solucionada con éxito.");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1747,13 +1752,11 @@ public class Menu {
                         String matricula = sc.next();
                         try {
                             concesionario.existeCoche(matricula);
+                            consultarReparaciones(matricula);
                         } catch (ExceptionParametrosInvalidos e) {
                             System.out.println(e.getMessage());
-                        }
-                        try {
-                            consultarReparaciones(matricula);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
                         }
                         break;
                     case 9:

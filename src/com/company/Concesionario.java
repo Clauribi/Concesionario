@@ -49,9 +49,13 @@ public class Concesionario {
         }
     }
 
-    public ArrayList<Coche> cochesReservadosCliente(String dni) {
+    public String verCochesReservadosCliente(String dni) {
         Cliente cliente = listadoClientes.get(dni);
-        return cliente.getReservados();
+        ArrayList<String> cochesReservados = new ArrayList<>();
+        for (Coche coche : cliente.getReservados().values()){
+            cochesReservados.add(coche.getInfo());
+        }
+        return cochesReservados.toString();
     }
 
     public void cocheAReparar(String matricula, TipoReparacion tipo) throws ExceptionParametrosInvalidos {
@@ -99,8 +103,8 @@ public class Concesionario {
     }
 
     public void deleteVendedorComision(String dni) throws ExceptionParametrosInvalidos {
-        VendedorComision v1 = listadoVendedores.get(dni);
-        if (v1.getCochesVendidos().isEmpty()) {
+        VendedorComision vendedor = listadoVendedores.get(dni);
+        if (vendedor.getCochesVendidos().isEmpty()) {
             this.listadoVendedores.remove(dni);
         } else throw new ExceptionParametrosInvalidos("El vendedor tiene coches vendidos. NO SE PUEDE BORRAR.");
     }
@@ -286,7 +290,7 @@ public class Concesionario {
 
     public String reservasCliente(Cliente cliente) {
         ArrayList<String> cochesReservados = new ArrayList<>();
-        for (Coche coche : cliente.getReservados()) {
+        for (Coche coche : cliente.getReservados().values()) {
             cochesReservados.add(coche.getInfo());
         }
         return cochesReservados.toString();
