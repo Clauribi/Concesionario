@@ -38,6 +38,7 @@ public class Concesionario {
         Exposicion exposicion = new Exposicion(1, "Calle Alvarado 2", 678345629);
         this.listadoExposiciones.put(1, exposicion);
     }
+
     public void cambiarCocheExposicion(String matricula, int numExpo) throws ExceptionParametrosInvalidos {
         Coche c = listadoCochesTotalesDefinitivo.get(matricula);
         Exposicion exposicion = listadoExposiciones.get(numExpo);
@@ -65,11 +66,7 @@ public class Concesionario {
         Coche coche = listadoCochesTotalesDefinitivo.get(matricula);
         for (Reparacion r : coche.getReparaciones()) {
             if (!r.isResuelta()) {
-                try {
-                    r.resolver(coche);
-                    System.out.println("RESUELTA*************");
-                } catch (ExceptionParametrosInvalidos e) {
-                    System.out.println(e.getMessage());                }
+                r.resolver(coche);
             }
         }
     }
@@ -153,8 +150,8 @@ public class Concesionario {
     }
 
     public void changeCoche(String marca, String modelo, String matricula, double compra, double venta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
-        Coche c = listadoCochesTotalesDefinitivo.get(matricula);
-        c.updateInfo(marca, modelo, compra, venta, t, exposicion);
+        Coche coche = listadoCochesTotalesDefinitivo.get(matricula);
+        coche.updateInfo(marca, modelo, compra, venta, t, exposicion);
     }
 
     public void addCliente(String dni, String nombre, String direccion, int telefono) throws ExceptionParametrosInvalidos {
@@ -171,8 +168,8 @@ public class Concesionario {
     }
 
     public void changeCliente(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
-        Cliente c = listadoClientes.get(dni);
-        c.updateInfo(nombre, direccion, telefono);
+        Cliente cliente = listadoClientes.get(dni);
+        cliente.updateInfo(nombre, direccion, telefono);
     }
 
     public void addMecanico(String dni, String nombre, String direccion, int telefono) throws ExceptionParametrosInvalidos {
@@ -287,10 +284,12 @@ public class Concesionario {
         return totalCoches.toString();
     }
 
-    public void reservasCliente(Cliente cliente){
-        for (Coche coche : cliente.getReservados()){
-            coche.getInfo();
+    public String reservasCliente(Cliente cliente) {
+        ArrayList<String> cochesReservados = new ArrayList<>();
+        for (Coche coche : cliente.getReservados()) {
+            cochesReservados.add(coche.getInfo());
         }
+        return cochesReservados.toString();
     }
 
     public ArrayList<VendedorComision> listaVendedores() {
