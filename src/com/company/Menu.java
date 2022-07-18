@@ -104,6 +104,7 @@ public class Menu {
                             vendedor.venderCoche(coche, cliente);
                             cliente.agregarCocheComprado(coche);
                             coche.setCliente(cliente);
+                            System.out.println("Venta realizada con éxito.");
                         } catch (ExceptionParametrosInvalidos e) {
                             System.out.println(e.getMessage());
                         }
@@ -219,6 +220,7 @@ public class Menu {
                             throw new ExceptionParametrosInvalidos("El coche no está reservado por este cliente.");
                         vendedor.cancelarReserva(coche);
                         cliente.getReservados().remove(matricula);
+                        System.out.println("Reserva cancelada con éxito.");
                         repetir = false;
                     } catch (ExceptionParametrosInvalidos e) {
                         System.out.println(e.getMessage());
@@ -509,7 +511,7 @@ public class Menu {
                 try {
                     concesionario.existeExposicion(numExpo);
                     System.out.println("Los datos de la exposición son: ");
-                    if (concesionario.verCochesExpo(numExpo).isEmpty()) {
+                    if (concesionario.listadoCochesExposicion(numExpo).isEmpty()) {
                         System.out.println(concesionario.verExpo(numExpo));
                         System.out.println("No hay coches en esta exposición.");
                     } else {
@@ -640,6 +642,7 @@ public class Menu {
             Exposicion exposicion = concesionario.getListadoExposiciones().get(numExpo);
             try {
                 concesionario.addCoche(marca, modelo, matricula, compra, venta, t, exposicion);
+                System.out.println("El coche se ha dado de alta con éxito.");
             } catch (ExceptionParametrosInvalidos e) {
                 System.out.println(e.getMessage());
             }
@@ -779,6 +782,7 @@ public class Menu {
         int telefono = sc.nextInt();
         try {
             concesionario.addCliente(dni, nombre, direccion, telefono);
+            System.out.println("El cliente se ha dado de alta con éxito.");
         } catch (ExceptionParametrosInvalidos e) {
             System.out.println(e.getMessage());
         }
@@ -895,6 +899,7 @@ public class Menu {
         int telefono = sc.nextInt();
         try {
             concesionario.addMecanico(dni, nombre, direccion, telefono);
+            System.out.println("El mecánico se ha dado de alta con éxito.");
         } catch (ExceptionParametrosInvalidos e) {
             System.out.println(e.getMessage());
         }
@@ -998,7 +1003,7 @@ public class Menu {
         if (concesionario.getListadoMecanicos().isEmpty()) {
             System.out.println("No se puede crear una reparación sin un mecánico.");
         } else if (concesionario.listaCochesStock().isEmpty()) {
-            System.out.println("no hay coches disponibles para reparar.");
+            System.out.println("No hay coches disponibles para reparar.");
         } else {
             System.out.println("Listado de coches que puede reparar.");
             System.out.println(concesionario.verCochesVenta());
@@ -1236,14 +1241,25 @@ public class Menu {
             int option = sc.nextInt();
             switch (option) {
                 case 1:
-
-                    System.out.println(concesionario.verCochesVenta());
+                    if (concesionario.listaCochesStock().isEmpty()) {
+                        System.out.println("No hay coches en venta.");
+                    } else {
+                        System.out.println(concesionario.verCochesVenta());
+                    }
                     break;
                 case 2:
-                    System.out.println(concesionario.verCochesReservados());
+                    if (concesionario.listaCochesReservados().isEmpty()) {
+                        System.out.println("No hay coches reservados.");
+                    } else {
+                        System.out.println(concesionario.verCochesReservados());
+                    }
                     break;
                 case 3:
-                    System.out.println(concesionario.verCochesReparacion());
+                    if (concesionario.listaCochesReparacion().isEmpty()) {
+                        System.out.println("No hay coches reparándose.");
+                    } else {
+                        System.out.println(concesionario.verCochesReparacion());
+                    }
                     break;
                 case 4:
                     if (concesionario.getListadoVendedores().isEmpty()) {
@@ -1289,7 +1305,27 @@ public class Menu {
                         System.out.println("Elige el coche que quieres consultar de la lista: ");
                         System.out.println(concesionario.verCochesVendidos());
                         String matricula = sc.next();
-                        System.out.println(concesionario.mostrarCliente(matricula));
+                        do {
+                            try {
+                                concesionario.existeCoche(matricula);
+                                Coche coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
+                                if (!concesionario.listaCochesVendidos().contains(coche)) {
+                                    throw new ExceptionParametrosInvalidos("El coche no está vendido.");
+                                }
+                                repetir = false;
+                            } catch (ExceptionParametrosInvalidos e) {
+                                System.out.println(e.getMessage());
+                                System.out.println("Indica una matrícula de la lista o escribe 'salir' para volver");
+                                if (!matricula.equals("salir")) {
+                                    repetir = true;
+                                } else if (matricula.equals("salir")) {
+                                    repetir = false;
+                                }
+                            }
+                        } while (repetir);
+                        if (!matricula.equals("salir")) {
+                            System.out.println(concesionario.mostrarCliente(matricula));
+                        }
                     }
                     break;
                 case 9:
@@ -1314,8 +1350,10 @@ public class Menu {
                 case 1:
                     try {
                         altaCliente();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
                     break;
                 case 2:
@@ -1333,7 +1371,11 @@ public class Menu {
                     }
                     break;
                 case 4:
-                    System.out.println(concesionario.verListaClientes());
+                    if (concesionario.getListadoClientes().isEmpty()) {
+                        System.out.println("No hay clientes dados de alta.");
+                    } else {
+                        System.out.println(concesionario.verListaClientes());
+                    }
                     break;
                 case 9:
                     menuDirectorComercial();
@@ -1360,8 +1402,10 @@ public class Menu {
                 case 1:
                     try {
                         altaMecanico();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
                     break;
                 case 2:
@@ -1379,7 +1423,11 @@ public class Menu {
                     }
                     break;
                 case 4:
-                    System.out.println(concesionario.verListaMecanicos());
+                    if (concesionario.getListadoMecanicos().isEmpty()) {
+                        System.out.println("No hay mecánicos dados de alta");
+                    } else {
+                        System.out.println(concesionario.verListaMecanicos());
+                    }
                     break;
                 case 5:
                     try {
@@ -1455,7 +1503,11 @@ public class Menu {
                     }
                     break;
                 case 4:
-                    System.out.println(concesionario.verListaVendedores());
+                    if (concesionario.getListadoVendedores().isEmpty()) {
+                        System.out.println("No hay vendedores dados de alta.");
+                    } else {
+                        System.out.println(concesionario.verListaVendedores());
+                    }
                     break;
                 case 5:
                     if (concesionario.getListadoVendedores().isEmpty()) {
@@ -1582,8 +1634,10 @@ public class Menu {
                 case 1:
                     try {
                         altaExposicion();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
                     break;
                 case 2:
@@ -1636,8 +1690,10 @@ public class Menu {
                 case 1:
                     try {
                         altaCoche();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
                     break;
                 case 2:
@@ -1655,7 +1711,11 @@ public class Menu {
                     }
                     break;
                 case 4:
-                    System.out.println(concesionario.verCochesConcesionario());
+                    if (concesionario.getListadoCochesTotalesDefinitivo().isEmpty()) {
+                        System.out.println("No hay coches en el concesionario.");
+                    } else {
+                        System.out.println(concesionario.verCochesConcesionario());
+                    }
                     break;
                 case 9:
                     menuDirectorComercial();
@@ -1726,7 +1786,7 @@ public class Menu {
                         }
                         break;
                     case 4:
-                        if (concesionario.getListadoCochesTotalesDefinitivo().isEmpty()){
+                        if (concesionario.getListadoCochesTotalesDefinitivo().isEmpty()) {
                             System.out.println("No hay coches en el concesionario.");
                         } else {
                             System.out.println(concesionario.verCochesConcesionario());
@@ -1740,7 +1800,7 @@ public class Menu {
                         }
                         break;
                     case 6:
-                        if (concesionario.getListadoClientes().isEmpty()){
+                        if (concesionario.getListadoClientes().isEmpty()) {
                             System.out.println("No hay clientes dados de alta.");
                         } else {
                             System.out.println(concesionario.verListaClientes());
@@ -1804,15 +1864,19 @@ public class Menu {
                         }
                         break;
                     case 3:
-                        System.out.println("Indica la matrícula del coche a consultar:");
-                        String matricula = sc.next();
-                        try {
-                            concesionario.existeCoche(matricula);
-                            consultarReparaciones(matricula);
-                        } catch (ExceptionParametrosInvalidos e) {
-                            System.out.println(e.getMessage());
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
+                        if (concesionario.getListadoCochesTotalesDefinitivo().isEmpty()) {
+                            System.out.println("No hay coche en el concesionario dados de alta.");
+                        } else {
+                            System.out.println("Indica la matrícula del coche a consultar:");
+                            String matricula = sc.next();
+                            try {
+                                concesionario.existeCoche(matricula);
+                                consultarReparaciones(matricula);
+                            } catch (ExceptionParametrosInvalidos e) {
+                                System.out.println(e.getMessage());
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
                         }
                         break;
                     case 9:
