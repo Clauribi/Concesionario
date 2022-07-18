@@ -19,14 +19,14 @@ public class VendedorComision extends Persona {
             cochesVendidos.put(coche.getMatricula(), coche);
             cliente.agregarCocheComprado(coche);
             coche.setCliente(cliente);
-        }else if (coche.getEstado() == EstadoCoche.reservado){
+        } else if (coche.getEstado() == EstadoCoche.reservado) {
             if (coche.getCliente() == cliente) {
                 coche.setEstado(EstadoCoche.vendido);
                 cochesVendidos.put(coche.getMatricula(), coche);
                 cliente.agregarCocheComprado(coche);
                 coche.setCliente(cliente);
             } else {
-                throw new ExceptionParametrosInvalidos("El coche con matricula " + coche.getMatricula() + " está reservado por " + coche.getCliente().getNombre());
+                throw new ExceptionParametrosInvalidos("El coche con matrícula " + coche.getMatricula() + " está reservado por " + coche.getCliente().getNombre());
             }
         } else {
             throw new ExceptionParametrosInvalidos("El coche no se puede vender porque el estado es " + coche.getEstado());
@@ -34,7 +34,7 @@ public class VendedorComision extends Persona {
     }
 
     public void reservarCoche(Coche coche, Cliente cliente) throws ExceptionParametrosInvalidos {
-        if (coche.getEstado() == EstadoCoche.enVenta){
+        if (coche.getEstado() == EstadoCoche.enVenta) {
             coche.setEstado(EstadoCoche.reservado);
             cliente.agregarCocheReservado(coche);
             coche.setCliente(cliente);
@@ -43,8 +43,8 @@ public class VendedorComision extends Persona {
         }
     }
 
-    public void cancelarReserva (Coche coche) throws ExceptionParametrosInvalidos {
-        if (coche.getEstado() == EstadoCoche.reservado){
+    public void cancelarReserva(Coche coche) throws ExceptionParametrosInvalidos {
+        if (coche.getEstado() == EstadoCoche.reservado) {
             coche.setEstado(EstadoCoche.enVenta);
         } else {
             throw new ExceptionParametrosInvalidos("No se puede cancelar la reserva del coche porque el estado es: " + coche.getEstado());

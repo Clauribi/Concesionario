@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Coche {
     private String marca;
@@ -55,6 +54,10 @@ public class Coche {
         this.exposicion = exposicion;
     }
 
+    public void setEstado(EstadoCoche estado) {
+        this.estado = estado;
+    }
+
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
@@ -65,10 +68,6 @@ public class Coche {
 
     public Exposicion getExposicion() {
         return exposicion;
-    }
-
-    public void setEstado(EstadoCoche estado) {
-        this.estado = estado;
     }
 
     public EstadoCoche getEstado() {
@@ -93,21 +92,12 @@ public class Coche {
         setExposicion(exposicion);
         this.estado = EstadoCoche.enVenta;
         this.reparaciones = new ArrayList<>();
-
     }
 
     public void cambiarExposicion(Exposicion expo) throws ExceptionParametrosInvalidos {
-        if (expo == null) throw new ExceptionParametrosInvalidos("La exposicion no existe.");
+        if (expo == null) throw new ExceptionParametrosInvalidos("La exposición no existe.");
         setExposicion(expo);
     }
-
-//    public void consultaReparaciones(String matricula) throws ExceptionParametrosInvalidos {
-//        if (this.reparaciones.containsKey(matricula)) {
-//            this.reparaciones.get(matricula);
-//        } else {
-//            throw new ExceptionParametrosInvalidos("La matricula no existe o no tiene reparaciones.");
-//        }
-//    }
 
     public void updateInfo(String marca, String modelo, double precioCompra, double precioVenta, TipoCoche t, Exposicion exposicion) throws ExceptionParametrosInvalidos {
         setMarca(marca);
@@ -118,13 +108,12 @@ public class Coche {
         setExposicion(exposicion);
     }
 
-
     public String getInfo() {
         return "\nMatrícula: " + this.matricula +
                 "\nMarca: " + this.marca +
                 "\nModelo: " + this.modelo +
                 "\nTipo: " + this.tipo +
-                "\nPrecio: " + this.precioVenta +
+                "\nPrecio venta: " + this.precioVenta +
                 "\nEstado: " + this.estado +
                 "\nNúmero exposición: " + this.exposicion.getNumExposicion() + "\n";
     }

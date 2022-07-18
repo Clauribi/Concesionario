@@ -1,6 +1,5 @@
 package com.company;
 
-
 import java.time.LocalDateTime;
 
 public class Reparacion implements Comparable<Reparacion> {
@@ -9,23 +8,23 @@ public class Reparacion implements Comparable<Reparacion> {
     private boolean resuelta;
     private LocalDateTime fechaDeCreacion;
 
-    public Reparacion(TipoReparacion tipo, Coche coche) throws ExceptionParametrosInvalidos {
-        if (tipo == null)
-            throw new ExceptionParametrosInvalidos("Los tipos de reparación tienen que ser: 'mecanica', 'electrica', 'chapa' o 'revision'");
-        this.tipo = tipo;
-        if (coche == null) throw new ExceptionParametrosInvalidos("El coche no existe.");
-        this.coche = coche;
-        this.coche.setEstado(EstadoCoche.reparando);
-        this.resuelta = false;
-        this.fechaDeCreacion = LocalDateTime.now();
-    }
-
     public LocalDateTime getFechaDeCreacion() {
         return fechaDeCreacion;
     }
 
     public boolean isResuelta() {
         return resuelta;
+    }
+
+    public Reparacion(TipoReparacion tipo, Coche coche) throws ExceptionParametrosInvalidos {
+        if (tipo == null)
+            throw new ExceptionParametrosInvalidos("Los tipos de reparación tienen que ser: 'mecanica', 'electrica', 'chapa' o 'revision'");
+        this.tipo = tipo;
+        if (coche == null) throw new ExceptionParametrosInvalidos("El coche no existe.");
+        this.coche = coche;
+        coche.setEstado(EstadoCoche.reparando);
+        this.resuelta = false;
+        this.fechaDeCreacion = LocalDateTime.now();
     }
 
     public void resolver(Coche coche) {
