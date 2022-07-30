@@ -36,10 +36,10 @@ public class Menu {
                     concesionario.existeCoche(matricula);
                     coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
                     if (!concesionario.listaCochesReservados().contains(coche) && !concesionario.listaCochesStock().contains(coche)) {
-                        throw new ExceptionParametrosInvalidos("El coche no está en venta ni reservado.");
+                        throw new NullCocheException();
                     }
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullCocheException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Indica una matrícula de la lista o escriba 'salir' para volver.");
                     matricula = sc.next();
@@ -87,7 +87,7 @@ public class Menu {
                         try {
                             concesionario.existeCliente(dni);
                             repetir = false;
-                        } catch (ExceptionParametrosInvalidos e) {
+                        } catch (NullClienteException e) {
                             System.out.println(e.getMessage());
                             System.out.println("Indica un DNI de la lista o escriba 'salir' para volver.");
                             dni = sc.next();
@@ -154,7 +154,7 @@ public class Menu {
                     try {
                         concesionario.existeCliente(dni);
                         repetir = false;
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (NullClienteException e) {
                         System.out.println(e.getMessage());
                         System.out.println("Indica un DNI de la lista o escriba 'salir' para volver.");
                         dni = sc.next();
@@ -194,7 +194,7 @@ public class Menu {
                     concesionario.existeCliente(dni);
                     cliente = concesionario.getListadoClientes().get(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullClienteException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un DNI de la lista o escribe 'salir' para volver.");
                     dni = sc.next();
@@ -249,7 +249,7 @@ public class Menu {
                 try {
                     concesionario.existeCliente(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullClienteException e) {
                     System.out.println(e.getMessage());
                     System.out.println("El DNI indicado no está en la lista. Introduzca un DNI de la lista o escriba 'salir para volver.");
                     dni = sc.next();
@@ -273,12 +273,12 @@ public class Menu {
         return "Cancelando operación...";
     }
 
-    private void altaVendedorComision() throws ExceptionParametrosInvalidos {
+    private void altaVendedorComision() throws DuplicadoException {
         System.out.println("Indica los siguientes datos para dar de alta un vendedor:");
         System.out.println("DNI:");
         String dni = sc.next();
         if (concesionario.getListadoVendedores().containsKey(dni))
-            throw new ExceptionParametrosInvalidos("Ya hay un vendedor con ese DNI.");
+            throw new DuplicadoException();
         System.out.println("Nombre:");
         String nombre = sc.next();
         System.out.println("Dirección:");
@@ -305,7 +305,7 @@ public class Menu {
                 try {
                     concesionario.existeVendedor(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullVendedorException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
@@ -316,7 +316,7 @@ public class Menu {
                     }
                 }
             } while (repetir);
-            if (dni != "salir") {
+            if (!dni.equals("salir")) {
                 do {
                     System.out.println("¿Estas seguro de querer dar de baja a este vendedor?");
                     System.out.println("1.-Sí");
@@ -356,7 +356,7 @@ public class Menu {
                 try {
                     concesionario.existeVendedor(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullVendedorException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
@@ -390,12 +390,12 @@ public class Menu {
         }
     }
 
-    private void altaExposicion() throws ExceptionParametrosInvalidos {
+    private void altaExposicion() throws DuplicadoException {
         System.out.println("Introduzca los siguientes datos para dar de alta una exposición:");
         System.out.println("Nº exposición:");
         int numExpo = sc.nextInt();
         if (concesionario.getListadoExposiciones().containsKey(numExpo)) {
-            throw new ExceptionParametrosInvalidos("Ya hay una exposición con ese número.");
+            throw new DuplicadoException();
         }
         System.out.println("Dirección:");
         String direccion = sc.next();
@@ -421,7 +421,7 @@ public class Menu {
                 try {
                     concesionario.existeExposicion(numExpo);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullExposicionException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un número de la lista o indique 0 para volver.");
                     numExpo = sc.nextInt();
@@ -468,7 +468,7 @@ public class Menu {
                 try {
                     concesionario.existeExposicion(numExpo);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullExposicionException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un número de la lista o indique 0 para volver.");
                     numExpo = sc.nextInt();
@@ -518,7 +518,7 @@ public class Menu {
                         System.out.println(concesionario.verExpo(numExpo) + "\n" + concesionario.verCochesExpo(numExpo));
                     }
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullExposicionException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un número de la lista o indique 0 para volver.");
                     numExpo = sc.nextInt();
@@ -547,10 +547,10 @@ public class Menu {
                     concesionario.existeCoche(matricula);
                     coche = concesionario.getListadoCochesTotalesDefinitivo().get(matricula);
                     if (!concesionario.listaCochesStock().contains(coche)) {
-                        throw new ExceptionParametrosInvalidos("La matrícula no está en la lista.");
+                        throw new NullCocheException();
                     }
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullCocheException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Indica una matrícula correcta o escribe 'salir' para cancelar");
                     matricula = sc.next();
@@ -562,39 +562,38 @@ public class Menu {
                 }
             } while (repetir);
             if (!matricula.equals("salir")) {
-                if (concesionario.listaCochesStock().contains(coche)) {
-                    System.out.println("Indica la exposición de destino:");
-                    System.out.println(concesionario.verListaExposiciones());
-                    int numExpo = sc.nextInt();
-                    do {
-                        try {
-                            concesionario.existeExposicion(numExpo);
+                System.out.println("Indica la exposición de destino:");
+                System.out.println(concesionario.verListaExposiciones());
+                int numExpo = sc.nextInt();
+                do {
+                    try {
+                        concesionario.existeExposicion(numExpo);
+                        repetir = false;
+                    } catch (NullExposicionException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Introduzca un número de la lista o indique 0 para volver.");
+                        numExpo = sc.nextInt();
+                        if (numExpo != 0) {
+                            repetir = true;
+                        } else if (numExpo == 0) {
                             repetir = false;
-                        } catch (ExceptionParametrosInvalidos e) {
-                            System.out.println(e.getMessage());
-                            System.out.println("Introduzca un número de la lista o indique 0 para volver.");
-                            numExpo = sc.nextInt();
-                            if (numExpo != 0) {
-                                repetir = true;
-                            } else if (numExpo == 0) {
-                                repetir = false;
-                            }
                         }
-                    } while (repetir);
-                    if (numExpo != 0) {
-                        try {
-                            concesionario.cambiarCocheExposicion(matricula, numExpo);
-                            System.out.println("Cambio realizado con éxito.");
-                        } catch (ExceptionParametrosInvalidos e) {
-                            System.out.println(e.getMessage());
-                        }
+                    }
+                } while (repetir);
+                if (numExpo != 0) {
+                    try {
+                        concesionario.cambiarCocheExposicion(matricula, numExpo);
+                        System.out.println("Cambio realizado con éxito.");
+                    } catch (ExceptionParametrosInvalidos e) {
+                        System.out.println(e.getMessage());
                     }
                 }
             }
         }
     }
 
-    private void altaCoche() throws ExceptionParametrosInvalidos {
+
+    private void altaCoche() throws DuplicadoException {
         if (concesionario.getListadoExposiciones().isEmpty()) {
             System.out.println("Se necesita una exposición para dar de alta un coche.");
         } else {
@@ -602,7 +601,7 @@ public class Menu {
             System.out.println("Matrícula:");
             String matricula = sc.next();
             if (concesionario.getListadoCochesTotalesDefinitivo().containsKey(matricula)) {
-                throw new ExceptionParametrosInvalidos("Ya existe un coche con esta matrícula.");
+                throw new DuplicadoException();
             }
             System.out.println("Marca:");
             String marca = sc.next();
@@ -638,7 +637,7 @@ public class Menu {
             System.out.println("Nº exposición: ");
             int numExpo = sc.nextInt();
             if (!concesionario.getListadoExposiciones().containsKey(numExpo))
-                throw new ExceptionParametrosInvalidos("No existe la exposición");
+                throw new NullExposicionException();
             Exposicion exposicion = concesionario.getListadoExposiciones().get(numExpo);
             try {
                 concesionario.addCoche(marca, modelo, matricula, compra, venta, t, exposicion);
@@ -661,7 +660,7 @@ public class Menu {
                 try {
                     concesionario.existeCoche(matricula);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullCocheException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un coche de la lista o escribe 'salir' para volver.");
                     matricula = sc.next();
@@ -709,7 +708,7 @@ public class Menu {
                 try {
                     concesionario.existeCoche(matricula);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullCocheException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Indica un coche de la lista o escribe 'salir' para volver.");
                     matricula = sc.next();
@@ -768,12 +767,12 @@ public class Menu {
         }
     }
 
-    private void altaCliente() throws ExceptionParametrosInvalidos {
+    private void altaCliente() throws DuplicadoException {
         System.out.println("Introduzca los siguientes datos para dar de alta un cliente.");
         System.out.println("DNI:");
         String dni = sc.next();
         if (concesionario.getListadoClientes().containsKey(dni))
-            throw new ExceptionParametrosInvalidos("Ya hay un cliente con ese DNI.");
+            throw new DuplicadoException();
         System.out.println("Nombre:");
         String nombre = sc.next();
         System.out.println("Dirección:");
@@ -800,7 +799,7 @@ public class Menu {
                 try {
                     concesionario.existeCliente(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullClienteException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
@@ -851,7 +850,7 @@ public class Menu {
                 try {
                     concesionario.existeCliente(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullClienteException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
@@ -869,10 +868,10 @@ public class Menu {
                 System.out.println("Nombre nuevo:");
                 String nombre = sc.next();
                 System.out.println("Dirección original: " + cliente.getDireccion());
-                System.out.println("Dirección nueva: ");
+                System.out.println("Dirección nueva:");
                 String direccion = sc.next();
                 System.out.println("Teléfono original: " + cliente.getTelefono());
-                System.out.println("Teléfono nuevo: ");
+                System.out.println("Teléfono nuevo:");
                 int telefono = sc.nextInt();
                 try {
                     concesionario.changeCliente(nombre, direccion, dni, telefono);
@@ -885,12 +884,12 @@ public class Menu {
         }
     }
 
-    private void altaMecanico() throws ExceptionParametrosInvalidos {
+    private void altaMecanico() throws DuplicadoException {
         System.out.println("Introduzca los siguientes datos para dar de alta un mecánico.");
         System.out.println("DNI:");
         String dni = sc.next();
         if (concesionario.getListadoMecanicos().containsKey(dni))
-            throw new ExceptionParametrosInvalidos("Ya hay un mecánico con ese DNI.");
+            throw new DuplicadoException();
         System.out.println("Nombre:");
         String nombre = sc.next();
         System.out.println("Dirección:");
@@ -917,7 +916,7 @@ public class Menu {
                 try {
                     concesionario.existeMecanico(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullMecanicoException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
@@ -965,7 +964,7 @@ public class Menu {
                 try {
                     concesionario.existeMecanico(dni);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullMecanicoException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                     dni = sc.next();
@@ -983,10 +982,10 @@ public class Menu {
                 System.out.println("Nombre nuevo:");
                 String nombre = sc.next();
                 System.out.println("Dirección original: " + mecanico.getDireccion());
-                System.out.println("Dirección nueva: ");
+                System.out.println("Dirección nueva:");
                 String direccion = sc.next();
                 System.out.println("Teléfono original: " + mecanico.getTelefono());
-                System.out.println("Teléfono nuevo: ");
+                System.out.println("Teléfono nuevo:");
                 int telefono = sc.nextInt();
                 try {
                     concesionario.changeMecanico(nombre, direccion, dni, telefono);
@@ -1013,7 +1012,7 @@ public class Menu {
                 try {
                     concesionario.existeCoche(matricula);
                     repetir = false;
-                } catch (ExceptionParametrosInvalidos e) {
+                } catch (NullCocheException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Introduzca una matrícula de la lista o escriba 'salir' para volver.");
                     matricula = sc.next();
@@ -1134,7 +1133,7 @@ public class Menu {
                 case 2:
                     try {
                         menuVendedoresComision();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (NullVendedorException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1143,7 +1142,7 @@ public class Menu {
                 case 3:
                     try {
                         menuMecanico();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (NullMecanicoException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1273,7 +1272,7 @@ public class Menu {
                             try {
                                 concesionario.existeVendedor(dni);
                                 repetir = false;
-                            } catch (ExceptionParametrosInvalidos e) {
+                            } catch (NullVendedorException e) {
                                 System.out.println(e.getMessage());
                                 System.out.println("Indique un DNI de la lista o escriba 'salir' para volver.");
                                 dni = sc.next();
@@ -1350,7 +1349,7 @@ public class Menu {
                 case 1:
                     try {
                         altaCliente();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (DuplicadoException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1402,7 +1401,7 @@ public class Menu {
                 case 1:
                     try {
                         altaMecanico();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (DuplicadoException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1452,7 +1451,7 @@ public class Menu {
                         try {
                             concesionario.existeCoche(matricula);
                             consultarReparaciones(matricula);
-                        } catch (ExceptionParametrosInvalidos e) {
+                        } catch (NullCocheException e) {
                             System.out.println(e.getMessage());
                         }
                     }
@@ -1482,7 +1481,7 @@ public class Menu {
                 case 1:
                     try {
                         altaVendedorComision();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (DuplicadoException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1521,7 +1520,7 @@ public class Menu {
                             try {
                                 concesionario.existeVendedor(dni);
                                 repetir = false;
-                            } catch (ExceptionParametrosInvalidos e) {
+                            } catch (NullVendedorException e) {
                                 System.out.println(e.getMessage());
                                 System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
                                 dni = sc.next();
@@ -1555,7 +1554,7 @@ public class Menu {
                             try {
                                 concesionario.existeVendedor(dni);
                                 repetir = false;
-                            } catch (ExceptionParametrosInvalidos e) {
+                            } catch (NullVendedorException e) {
                                 System.out.println(e.getMessage());
                                 System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                                 dni = sc.next();
@@ -1588,7 +1587,7 @@ public class Menu {
                             try {
                                 concesionario.existeVendedor(dni);
                                 repetir = false;
-                            } catch (ExceptionParametrosInvalidos e) {
+                            } catch (NullVendedorException e) {
                                 System.out.println(e.getMessage());
                                 System.out.println("Introduzca un DNI de la lista o escriba 'salir' para volver.");
                                 dni = sc.next();
@@ -1634,7 +1633,7 @@ public class Menu {
                 case 1:
                     try {
                         altaExposicion();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (DuplicadoException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1690,7 +1689,7 @@ public class Menu {
                 case 1:
                     try {
                         altaCoche();
-                    } catch (ExceptionParametrosInvalidos e) {
+                    } catch (DuplicadoException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1727,9 +1726,9 @@ public class Menu {
         }
     }
 
-    private void menuVendedoresComision() throws ExceptionParametrosInvalidos {
+    private void menuVendedoresComision() throws NullVendedorException {
         if (concesionario.getListadoVendedores().isEmpty()) {
-            throw new ExceptionParametrosInvalidos("No hay vendedores dados de alta.");
+            throw new NullVendedorException();
         }
         System.out.println("Indica tu DNI para acceder:");
         String dni = sc.next();
@@ -1737,7 +1736,7 @@ public class Menu {
             try {
                 concesionario.existeVendedor(dni);
                 repetir = false;
-            } catch (ExceptionParametrosInvalidos e) {
+            } catch (NullVendedorException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
                 dni = sc.next();
@@ -1817,9 +1816,9 @@ public class Menu {
         }
     }
 
-    private void menuMecanico() throws ExceptionParametrosInvalidos {
+    private void menuMecanico() throws NullMecanicoException {
         if (concesionario.getListadoMecanicos().isEmpty()) {
-            throw new ExceptionParametrosInvalidos("No hay mecánicos dados de alta.");
+            throw new NullMecanicoException();
         }
         System.out.println("Indica tu DNI para acceder:");
         String dni = sc.next();
@@ -1827,7 +1826,7 @@ public class Menu {
             try {
                 concesionario.existeMecanico(dni);
                 repetir = false;
-            } catch (ExceptionParametrosInvalidos e) {
+            } catch (NullMecanicoException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Indica un DNI correcto o escribe 'salir' para volver.");
                 dni = sc.next();
@@ -1872,7 +1871,7 @@ public class Menu {
                             try {
                                 concesionario.existeCoche(matricula);
                                 consultarReparaciones(matricula);
-                            } catch (ExceptionParametrosInvalidos e) {
+                            } catch (NullCocheException e) {
                                 System.out.println(e.getMessage());
                             } catch (Exception e1) {
                                 e1.printStackTrace();

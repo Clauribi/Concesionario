@@ -37,26 +37,26 @@ public class Concesionario {
         this.listadoVendedores = new HashMap<>();
     }
 
-    public void existeVendedor(String dni) throws ExceptionParametrosInvalidos {
-        if (!listadoVendedores.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe vendedor.");
+    public void existeVendedor(String dni) throws NullVendedorException {
+        if (!listadoVendedores.containsKey(dni)) throw new NullVendedorException();
     }
 
-    public void existeCliente(String dni) throws ExceptionParametrosInvalidos {
-        if (!listadoClientes.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe el cliente.");
+    public void existeCliente(String dni) throws NullClienteException {
+        if (!listadoClientes.containsKey(dni)) throw new NullClienteException();
     }
 
-    public void existeMecanico(String dni) throws ExceptionParametrosInvalidos {
-        if (!listadoMecanicos.containsKey(dni)) throw new ExceptionParametrosInvalidos("No existe el mecánico.");
+    public void existeMecanico(String dni) throws NullMecanicoException {
+        if (!listadoMecanicos.containsKey(dni)) throw new NullMecanicoException();
     }
 
-    public void existeCoche(String matricula) throws ExceptionParametrosInvalidos {
+    public void existeCoche(String matricula) throws NullCocheException {
         if (!listadoCochesTotalesDefinitivo.containsKey(matricula))
-            throw new ExceptionParametrosInvalidos("No existe el coche.");
+            throw new NullCocheException();
     }
 
-    public void existeExposicion(int numExpo) throws ExceptionParametrosInvalidos {
+    public void existeExposicion(int numExpo) throws NullExposicionException {
         if (!listadoExposiciones.containsKey(numExpo))
-            throw new ExceptionParametrosInvalidos("No existe la exposición.");
+            throw new NullExposicionException();
     }
 
     public void addVendedorComision(String nombre, String direccion, String dni, int telefono) throws ExceptionParametrosInvalidos {
